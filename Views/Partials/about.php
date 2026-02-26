@@ -1,0 +1,20 @@
+<div id="about" class="about">
+  <div class="bg_about">
+    <div class="container">
+      <div class="row d_flex">
+        <div class="col-md-5">
+          <div class="about_img">
+            <figure><img src="images/about.jpg" alt="#"/></figure>
+          </div>
+        </div>
+        <div class="col-md-6 offset-md-1">
+          <div class="titlepage text_align_right">
+            <h2>About of Factory</h2>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <a class="read_more" href="Javascript:void(0)">About Us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
