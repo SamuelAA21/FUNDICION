@@ -1,179 +1,221 @@
 <?php
-/* Se abre el bloque PHP */
+/* Se abre PHP */
 
-/* Se incluye el DAO del módulo Cliente */
-require_once __DIR__ . '/../../DAO/Cliente/ClienteDAO.php';
+/* Se incluye la conexión */
+require_once __DIR__ . '/../../Lib/Config/conexionSqli.php';
 
-/* Se define el controlador CtrlCliente que hereda del DAO */
-class CtrlCliente extends ClienteDAO
+/* Se define el DAO */
+class ClienteDAO
 {
+    /* Se define la conexión */
+    protected $cn;
+
     /* Constructor */
     public function __construct()
     {
-        /* Se llama el constructor del DAO */
-        parent::__construct();
-    }
-
-    /* Función read: carga la vista del módulo */
-    public function read()
-    {
-        /* Se incluye la vista principal */
-        require_once __DIR__ . '/../../View/Cliente/viewCliente.php';
-    }
-
-    /* Función data: retorna JSON para DataTables */
-    public function data()
-    {
-        /* Se define header JSON */
-        header('Content-Type: application/json; charset=utf-8');
-
-        /* Se inicializa la salida */
-        $out = [];
-
-        /* Se define el arreglo data */
-        $out['data'] = [];
-
-        /* Se obtiene el listado desde el DAO */
-        $rows = $this->getAll();
-
-        /* Se recorre el listado */
-        foreach ($rows as $i => $r) {
-
-            /* Se arma el HTML de acciones (botones) */
-            $acciones = ''
-                . '<button type="button" class="btn btn-sm btn-primary" onclick="clienteEditar(\'' . htmlspecialchars($r['cli_nit']) . '\')">Editar</button> '
-                . '<button type="button" class="btn btn-sm btn-danger" onclick="clienteEliminar(\'' . htmlspecialchars($r['cli_nit']) . '\')">Eliminar</button>';
-
-            /* Se asignan los campos que DataTables espera */
-            $out['data'][$i]['cli_nit'] = $r['cli_nit'];
-            $out['data'][$i]['cli_razon_social'] = $r['cli_razon_social'];
-            $out['data'][$i]['cli_dir'] = $r['cli_dir'];
-            $out['data'][$i]['cli_tel'] = $r['cli_tel'];
-            $out['data'][$i]['cli_correo'] = $r['cli_correo'];
-            $out['data'][$i]['cli_nombre_contacto'] = $r['cli_nombre_contacto'];
-            $out['data'][$i]['cli_estado'] = $r['cli_estado'];
-            $out['data'][$i]['acciones'] = $acciones;
+        /* Opción 1: si tu conexión es un método estático Conexion::conectar() */
+        if (class_exists('Conexion') && method_exists('Conexion', 'conectar')) {
+            $this->cn = Conexion::conectar();
+            return;
         }
 
-        /* Se imprime el JSON */
-        echo json_encode($out);
-
-        /* Se detiene ejecución */
-        exit;
-    }
-
-    /* Función one: retorna un cliente por NIT (para edición) */
-    public function one()
-    {
-        /* Se define header JSON */
-        header('Content-Type: application/json; charset=utf-8');
-
-        /* Se lee el NIT */
-        $cli_nit = isset($_POST['cli_nit']) ? trim($_POST['cli_nit']) : '';
-
-        /* Se consulta */
-        $row = $this->getByNit($cli_nit);
-
-        /* Se responde */
-        echo json_encode($row ? $row : []);
-
-        /* Se finaliza */
-        exit;
-    }
-
-    /* Función save: inserta o actualiza */
-    public function save()
-    {
-        /* Se define header JSON */
-        header('Content-Type: application/json; charset=utf-8');
-
-        /* Se toman campos */
-        $cli_nit = isset($_POST['cli_nit']) ? trim($_POST['cli_nit']) : '';
-        $cli_razon_social = isset($_POST['cli_razon_social']) ? trim($_POST['cli_razon_social']) : '';
-        $cli_dir = isset($_POST['cli_dir']) ? trim($_POST['cli_dir']) : '';
-        $cli_tel = isset($_POST['cli_tel']) ? trim($_POST['cli_tel']) : '';
-        $cli_correo = isset($_POST['cli_correo']) ? trim($_POST['cli_correo']) : '';
-        $cli_nombre_contacto = isset($_POST['cli_nombre_contacto']) ? trim($_POST['cli_nombre_contacto']) : '';
-        $cli_estado = isset($_POST['cli_estado']) ? trim($_POST['cli_estado']) : 'Activo';
-
-        /* Validación mínima */
-        if ($cli_nit === '' || $cli_razon_social === '') {
-            /* Respuesta de error */
-            echo json_encode(['ok' => false, 'msg' => 'NIT y Razón social son obligatorios.']);
-            /* Se finaliza */
-            exit;
+        /* Opción 2: si tu conexión es una función conectar() */
+        if (function_exists('conectar')) {
+            $this->cn = conectar();
+            return;
         }
 
-        /* Usuario creador (si manejas sesión) */
-        $Cli_usu_crea = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : 'system';
+        /* Si no se pudo, deja null */
+        $this->cn = null;
+    }
 
-        /* Se valida si existe */
-        $existe = $this->getByNit($cli_nit);
-
-        /* Si existe, actualiza */
-        if ($existe) {
-
-            /* Se actualiza */
-            $ok = $this->update(
-                $cli_nit,
-                $cli_razon_social,
-                $cli_dir,
-                $cli_tel,
-                $cli_correo,
-                $cli_nombre_contacto,
-                $cli_estado
-            );
-
-            /* Se responde */
-            echo json_encode(['ok' => $ok, 'msg' => $ok ? 'Cliente actualizado.' : 'No se pudo actualizar.']);
-
-            /* Se finaliza */
-            exit;
+    /* Traer todos */
+    public function getAll()
+    {
+        /* Si no hay conexión */
+        if ($this->cn === null) {
+            return [];
         }
 
-        /* Si no existe, inserta */
-        $ok = $this->insert(
+        /* SQL */
+        $sql = "SELECT cli_nit, cli_razon_social, cli_dir, cli_tel, cli_correo, cli_nombre_contacto, cli_estado
+                FROM cliente";
+
+        /* Ejecuta */
+        $rs = $this->cn->query($sql);
+
+        /* Valida */
+        if (!$rs) {
+            return [];
+        }
+
+        /* Arreglo */
+        $rows = [];
+
+        /* Recorre */
+        while ($row = $rs->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        /* Retorna */
+        return $rows;
+    }
+
+    /* Traer uno */
+    public function getByNit($cli_nit)
+    {
+        /* Si no hay conexión */
+        if ($this->cn === null) {
+            return null;
+        }
+
+        /* SQL */
+        $sql = "SELECT cli_nit, cli_razon_social, cli_dir, cli_tel, cli_correo, cli_nombre_contacto, cli_estado
+                FROM cliente
+                WHERE cli_nit = ?";
+
+        /* Prepara */
+        $stmt = $this->cn->prepare($sql);
+
+        /* Valida */
+        if (!$stmt) {
+            return null;
+        }
+
+        /* Bind */
+        $stmt->bind_param("s", $cli_nit);
+
+        /* Ejecuta */
+        $stmt->execute();
+
+        /* Resultado */
+        $rs = $stmt->get_result();
+
+        /* Fila */
+        $row = $rs ? $rs->fetch_assoc() : null;
+
+        /* Cierra */
+        $stmt->close();
+
+        /* Retorna */
+        return $row;
+    }
+
+    /* Insertar */
+    public function insert($cli_nit, $cli_razon_social, $cli_dir, $cli_tel, $cli_correo, $cli_nombre_contacto, $cli_estado)
+    {
+        /* Si no hay conexión */
+        if ($this->cn === null) {
+            return false;
+        }
+
+        /* SQL */
+        $sql = "INSERT INTO cliente
+                (cli_nit, cli_razon_social, cli_dir, cli_tel, cli_correo, cli_nombre_contacto, cli_estado, Cli_fecha_crea, Cli_usu_crea)
+                VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), 'system')";
+
+        /* Prepara */
+        $stmt = $this->cn->prepare($sql);
+
+        /* Valida */
+        if (!$stmt) {
+            return false;
+        }
+
+        /* Bind */
+        $stmt->bind_param(
+            "sssssss",
             $cli_nit,
             $cli_razon_social,
             $cli_dir,
             $cli_tel,
             $cli_correo,
             $cli_nombre_contacto,
-            $cli_estado,
-            $Cli_usu_crea
+            $cli_estado
         );
 
-        /* Se responde */
-        echo json_encode(['ok' => $ok, 'msg' => $ok ? 'Cliente registrado.' : 'No se pudo registrar.']);
+        /* Ejecuta */
+        $ok = $stmt->execute();
 
-        /* Se finaliza */
-        exit;
+        /* Cierra */
+        $stmt->close();
+
+        /* Retorna */
+        return $ok;
     }
 
-    /* Función del: elimina */
-    public function del()
+    /* Actualizar */
+    public function update($cli_nit, $cli_razon_social, $cli_dir, $cli_tel, $cli_correo, $cli_nombre_contacto, $cli_estado)
     {
-        /* Se define header JSON */
-        header('Content-Type: application/json; charset=utf-8');
-
-        /* Se lee el nit */
-        $cli_nit = isset($_POST['cli_nit']) ? trim($_POST['cli_nit']) : '';
-
-        /* Validación */
-        if ($cli_nit === '') {
-            /* Respuesta */
-            echo json_encode(['ok' => false, 'msg' => 'NIT inválido.']);
-            /* Se finaliza */
-            exit;
+        /* Si no hay conexión */
+        if ($this->cn === null) {
+            return false;
         }
 
-        /* Se elimina */
-        $ok = $this->delete($cli_nit);
+        /* SQL */
+        $sql = "UPDATE cliente
+                SET cli_razon_social = ?, cli_dir = ?, cli_tel = ?, cli_correo = ?, cli_nombre_contacto = ?, cli_estado = ?
+                WHERE cli_nit = ?";
 
-        /* Se responde */
-        echo json_encode(['ok' => $ok, 'msg' => $ok ? 'Cliente eliminado.' : 'No se pudo eliminar.']);
+        /* Prepara */
+        $stmt = $this->cn->prepare($sql);
 
-        /* Se finaliza */
-        exit;
+        /* Valida */
+        if (!$stmt) {
+            return false;
+        }
+
+        /* Bind */
+        $stmt->bind_param(
+            "sssssss",
+            $cli_razon_social,
+            $cli_dir,
+            $cli_tel,
+            $cli_correo,
+            $cli_nombre_contacto,
+            $cli_estado,
+            $cli_nit
+        );
+
+        /* Ejecuta */
+        $ok = $stmt->execute();
+
+        /* Cierra */
+        $stmt->close();
+
+        /* Retorna */
+        return $ok;
+    }
+
+    /* Eliminar */
+    public function delete($cli_nit)
+    {
+        /* Si no hay conexión */
+        if ($this->cn === null) {
+            return false;
+        }
+
+        /* SQL */
+        $sql = "DELETE FROM cliente WHERE cli_nit = ?";
+
+        /* Prepara */
+        $stmt = $this->cn->prepare($sql);
+
+        /* Valida */
+        if (!$stmt) {
+            return false;
+        }
+
+        /* Bind */
+        $stmt->bind_param("s", $cli_nit);
+
+        /* Ejecuta */
+        $ok = $stmt->execute();
+
+        /* Cierra */
+        $stmt->close();
+
+        /* Retorna */
+        return $ok;
     }
 }
