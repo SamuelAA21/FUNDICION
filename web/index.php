@@ -3,14 +3,13 @@ require_once __DIR__ . "/../Lib/helpers.php";
 ?>
 <!DOCTYPE html>
 <html> 
-    <?php 
-    include_once '../Lib/helpers.php';
-    include_once '../View/Partials/head.php';  
-    ?> 
+  <?php include_once '../View/Partials/head.php'?> 
 <body>
-
-<?php include_once '../View/Partials/sidepanel.php'; ?>
-
+<?php
+    include_once '../Lib/helpers.php';
+    include_once '../View/Partials/sidepanel.php';  
+    include_once '../View/Partials/header.php';   
+    include_once '../View/Partials/scripts.php';?>
 <?php
 if (!isset($_GET["module"])) {
   include_once '../View/Partials/about.php';
