@@ -107,15 +107,10 @@ require_once __DIR__ . "/../../Lib/helpers.php";
 
 <!-- URLs generadas con helpers (para AJAX) -->
 <script>
-  /* URL para DataTables */
   const URL_CLIENTE_DATA = "<?php echo getUrl('Cliente','Cliente','data', false, true); ?>";
-  /* URL para traer un registro */
   const URL_CLIENTE_ONE  = "<?php echo getUrl('Cliente','Cliente','one', false, true); ?>";
-  /* URL para guardar */
   const URL_CLIENTE_SAVE = "<?php echo getUrl('Cliente','Cliente','save', false, true); ?>";
-  /* URL para eliminar */
   const URL_CLIENTE_DEL  = "<?php echo getUrl('Cliente','Cliente','del', false, true); ?>";
 </script>
 
-<!-- JS del módulo -->
-<script src="../View/Cliente/cliente.js"></script>
+<!-- JS del módulo (una sola vez) -->
