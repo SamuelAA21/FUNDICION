@@ -8,7 +8,7 @@ class CtrlCliente extends ClienteDAO {
     }
 
     public function data(){
-        $list = $this->getAll();   // viene del DAO
+        $list = $this->getAll();
         $array = [];
 
         foreach($list as $key => $row){

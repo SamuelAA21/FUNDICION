@@ -1,17 +1,26 @@
 /* Variable global para la tabla */
 var tablaClientes = null;
 
-/* Cuando el documento esté listo */
 $(document).ready(function () {
+    listCliente();
+});
 
-    /* Se inicializa DataTable */
+var tablaClientes = null;
+
+var listCliente = function () {
     tablaClientes = $("#tblClientes").DataTable({
+        destroy: true,
         responsive: true,
+        searching: true,
+        ordering: false,
+        lengthChange: false,
+        pageLength: 15,
+        autoWidth: true,
         ajax: {
-            url: URL_CLIENTE_DATA,
-            type: "GET",
-            dataType: "json"
+            url: "ajax.php?module=Cliente&controller=Cliente&function=data",
+            method: "GET" // o "POST" si tú lo manejas así
         },
+        deferRender: true,
         columns: [
             { data: "cli_nit" },
             { data: "cli_razon_social" },
@@ -20,18 +29,10 @@ $(document).ready(function () {
             { data: "cli_correo" },
             { data: "cli_nombre_contacto" },
             { data: "cli_estado" },
-            { data: "acciones", orderable: false, searchable: false }
-        ],
-        language: {
-            search: "Buscar:",
-            lengthMenu: "Mostrar _MENU_ registros",
-            info: "Mostrando _START_ a _END_ de _TOTAL_",
-            paginate: { next: "Siguiente", previous: "Anterior" },
-            zeroRecords: "No hay datos disponibles"
-        }
+            { data: "acciones" }
+        ]
     });
-
-});
+};
 
 
 window.clienteNuevo = function () {
