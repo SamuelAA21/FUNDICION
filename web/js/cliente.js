@@ -1,4 +1,4 @@
-/* Variable global para la tabla */
+
 var tablaClientes = null;
 
 $(document).ready(function () {
