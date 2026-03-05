@@ -23,3 +23,5 @@
 <?php if (isset($_GET['module']) && $_GET['module'] === 'Cliente') { ?>
   <script src="js/cliente.js"></script>
 <?php } ?>
+
+<script src="js/combustible.js"></script>

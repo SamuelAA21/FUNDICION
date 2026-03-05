@@ -14,6 +14,7 @@
   <!-- Módulos del sistema (con helpers) -->
   <a href="<?php echo getUrl('User','User','crear_usuario'); ?>">Crear usuario</a>
   <a href="<?php echo getUrl('Cliente','Cliente','read'); ?>">Clientes</a>
+  <a href="<?php echo getUrl('Combustible','Combustible','read'); ?>">Combustible</a>
 
   <!-- Si luego creas más módulos, los agregas igual -->
   <!--

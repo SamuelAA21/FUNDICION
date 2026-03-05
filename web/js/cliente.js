@@ -13,9 +13,8 @@ var listCliente = function () {
         responsive: true,
         searching: true,
         ordering: false,
-        lengthChange: false,
         pageLength: 15,
-        autoWidth: true,
+        autoWidth: false,
         ajax: {
             url: "ajax.php?module=Cliente&controller=Cliente&function=data",
             method: "GET" // o "POST" si tú lo manejas así
