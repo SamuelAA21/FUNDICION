@@ -558,6 +558,201 @@ ul.site_menu li a {
 
 .products .titlepage p {
      color: #fff;
+}
+
+/* --- General app page styles --- */
+body {
+    background: linear-gradient(180deg, #fffef9 0%, #f7f8fa 40%, #e4e8ef 100%);
+}
+
+.page-main {
+    padding: 30px 0 60px;
+    background: rgba(255,255,255,0.95);
+}
+
+.navbar-portal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid #e6e6e6;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+}
+
+.navbar-portal .brand {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #161616;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.navbar-portal nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-portal nav a {
+    color: #333;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.navbar-portal nav a:hover,
+.navbar-portal nav a.active {
+    background: #f3cf2d;
+    color: #000;
+}
+
+.site-hero-banner {
+    margin-top: 72px;
+    padding: 80px 0 48px;
+    background-image: url(../images/banner1.jpg);
+    background-size: cover;
+    background-position: center;
+    color: #111;
+    position: relative;
+}
+
+.site-hero-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 212, 0, 0.35), rgba(0,0,0,0.25));
+}
+
+.site-hero-banner .hero-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.site-hero-banner h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 48px;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.site-hero-banner p {
+    color: #f3f3f3;
+    font-size: 18px;
+    margin: 12px 0 20px;
+}
+
+.site-footer {
+    padding: 40px 0;
+    background:#111;
+    color:#fff;
+    text-align:center;
+}
+
+.table-responsive-custom {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+}
+
+.table-style-main {
+    margin-bottom: 0;
+    width: 100%;
+    min-width: 620px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.table-style-main thead th {
+    background: #004b8d;
+    color: #ffffff;
+    font-weight: 600;
+    border-bottom: 2px solid #0d6efd;
+    text-align: left;
+    padding: 10px 12px;
+}
+
+.table-style-main tbody tr:nth-child(odd) {
+    background: #f7f9fc;
+}
+
+.table-style-main tbody tr:hover {
+    background: #e9f2ff;
+}
+
+.table-style-main td {
+    padding: 10px 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.table-style-main .text-center {
+    text-align: center!important;
+}
+
+.status-badge {
+    display:inline-block;
+    min-width: 90px;
+    border-radius: 12px;
+    padding: 4px 9px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.status-active { background: #28a745; }
+.status-inactive { background: #dc3545; }
+
+.btn-table-action {
+    min-width: 72px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    margin-right: 5px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-table-action.btn-edit { background: #000; }
+.btn-table-action.btn-delete { background: #dc3545; }
+
+@media (max-width: 900px) {
+    .table-style-main thead { display: none; }
+    .table-style-main, .table-style-main tbody, .table-style-main tr, .table-style-main td {
+        display: block;
+        width: 100%;
+    }
+    .table-style-main tr {
+        margin-bottom: 15px;
+    }
+    .table-style-main td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+    .table-style-main td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 12px;
+        width: 42%;
+        padding-right: 10px;
+        font-weight: 700;
+        text-align: left;
+        color: #555;
+    }
+}
+
      font-size: 17px;
      line-height: 28px;
      padding-top: 25px;

@@ -14,6 +14,10 @@
 
         <div class="col-md-10 col-sm-9">
           <ul class="site_menu text_align_right">
+            <li><a href="index.php">Home</a></li>
+            <li><a href="index.php?module=Cliente&controller=Cliente&function=read">Clientes</a></li>
+            <li><a href="index.php?module=Combustible&controller=Combustible&function=read">Combustible</a></li>
+            <li><a href="index.php?module=Horno&controller=Horno&function=read">Horno</a></li>
             <li>
               <button class="openbtn" onclick="openNav()"><img src="images/menu_icon.png" alt=""></button>
             </li>
