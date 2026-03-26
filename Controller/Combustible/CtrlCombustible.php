@@ -15,11 +15,11 @@ class CtrlCombustible extends CombustibleDAO {
 
         foreach($list as $row){
 
-            $array['data'][$i]['comb_id'] = $row['comb_id'];
-            $array['data'][$i]['comb_descripcion'] = $row['comb_descripcion'];
-            $array['data'][$i]['comb_estado'] = ($row['comb_estado'] == 1) ? "Activo" : "Inactivo";
+            $array['data'][$i]['comb_id'] = $row['com_id'] ?? $row['comb_id'];
+            $array['data'][$i]['comb_descripcion'] = $row['com_descripcion'] ?? $row['comb_descripcion'];
+            $array['data'][$i]['comb_estado'] = ((isset($row['com_estado']) ? $row['com_estado'] : ($row['comb_estado'] ?? 0)) == 1) ? "Activo" : "Inactivo";
 
-            $id = $row['comb_id'];
+            $id = $array['data'][$i]['comb_id'];
             $array['data'][$i]['acciones'] =
                 "<button class='btn btn-sm btn-primary' onclick=\"combustibleEditar('$id')\">Editar</button>
                  <button class='btn btn-sm btn-danger' onclick=\"combustibleEliminar('$id')\">Eliminar</button>";

@@ -15,12 +15,12 @@ class Connection{
 	}
 	
 	private function setConnect(){
-		require_once __DIR__ . "/configuracion.php";
-		$this->host=$servidor;
-		$this->user=$usuario;
-		$this->password=$clave;
-		$this->port=$puerto;
-		$this->database=$baseDatos;
+		require __DIR__ . "/configuracion.php";
+		$this->host = defined('DB_HOST') ? DB_HOST : ($servidor ?? 'localhost');
+		$this->user = defined('DB_USER') ? DB_USER : ($usuario ?? 'root');
+		$this->password = defined('DB_PASSWORD') ? DB_PASSWORD : ($clave ?? '');
+		$this->port = defined('DB_PORT') ? DB_PORT : ($puerto ?? 3306);
+		$this->database = defined('DB_DATABASE') ? DB_DATABASE : ($baseDatos ?? 'bd_fundicion');
 	}
 	private function connect(){
 		$this->link=mysqli_connect(

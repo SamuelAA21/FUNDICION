@@ -4,7 +4,7 @@ require_once __DIR__ . "/../../Lib/Config/conexionSqli.php";
 class CtrlUser {
 
     public function home() {
-    require_once __DIR__ . "/../../Views/Home/home.php";
+    require_once __DIR__ . "/../../View/Home/home.php";
   }
   public function login() {
     if (session_status() === PHP_SESSION_NONE) session_start();

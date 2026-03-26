@@ -8,7 +8,7 @@
 <script src="js/datatables.min.js"></script>
 
 <!-- 4) SweetAlert -->
-<script src="js/sweet_alert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <!-- 5) Bootstrap (BS4) -->
 <script src="js/popper.min.js"></script>
@@ -20,8 +20,14 @@
 <!-- 6) Scripts del template -->
 <script src="js/custom.js"></script>
 
-<?php if (isset($_GET['module']) && $_GET['module'] === 'Cliente') { ?>
-  <script src="js/cliente.js"></script>
-<?php } ?>
-
-<script src="js/combustible.js"></script>
+<?php if (isset($_GET['module'])) {
+    if ($_GET['module'] === 'Cliente') {
+        echo '<script src="js/cliente.js"></script>';
+    }
+    if ($_GET['module'] === 'Combustible') {
+        echo '<script src="js/combustible.js"></script>';
+    }
+    if ($_GET['module'] === 'Horno') {
+        echo '<script src="js/horno.js"></script>';
+    }
+} ?>
