@@ -1,5 +1,4 @@
 <?php
-// URLs Ajax siguiendo su helper getUrl(...)
 $URL_HORNO_SAVE = getUrl("Horno","Horno","save",false,true);
 $URL_HORNO_ONE  = getUrl("Horno","Horno","one",false,true);
 $URL_HORNO_DEL  = getUrl("Horno","Horno","del",false,true);
