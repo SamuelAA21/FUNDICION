@@ -30,4 +30,16 @@
     if ($_GET['module'] === 'Horno') {
         echo '<script src="js/horno.js"></script>';
     }
+    if ($_GET['module'] === 'MateriaPrima') {
+        echo '<script src="js/materia_prima.js"></script>';
+    }
+    if ($_GET['module'] === 'ProductoTerminado') {
+        echo '<script src="js/producto_terminado.js"></script>';
+    }
+    if ($_GET['module'] === 'RecepcionResiduos') {
+        echo '<script src="js/recepcion_residuos.js"></script>';
+    }
+    if ($_GET['module'] === 'DetalleFundicion') {
+        echo '<script src="js/detalle_fundicion.js"></script>';
+    }
 } ?>
