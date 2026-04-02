@@ -58,7 +58,7 @@ class CtrlCombustible extends CombustibleDAO {
             echo json_encode(["ok"=>true, "msg"=>"Combustible creado correctamente"]);
             return;
         }
-
+//No editarlo automaticamente cuando coincidan los ID. (Error de autoincremento)
         $this->update($comb_id, $comb_descripcion, $comb_estado);
         echo json_encode(["ok"=>true, "msg"=>"Combustible actualizado correctamente"]);
     }

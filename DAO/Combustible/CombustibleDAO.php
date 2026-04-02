@@ -16,7 +16,6 @@ class CombustibleDAO extends Connection {
         $sql = "SELECT com_id, com_descripcion, com_estado FROM combustible";
         return $this->execute($sql);
     }
-
     public function getById($comb_id) {
         $comb_id = (int)$comb_id;
         $sql = "SELECT com_id, com_descripcion, com_estado FROM combustible WHERE com_id = $comb_id";
