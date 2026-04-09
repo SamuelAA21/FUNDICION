@@ -34,6 +34,12 @@ class ProductoTerminadoDAO extends Connection {
         return $this->execute("SELECT * FROM producto_terminado WHERE pro_id = $pro_id");
     }
 
+    public function existsById($pro_id): bool {
+        $pro_id = (int)$pro_id;
+        $rs = $this->execute("SELECT 1 FROM producto_terminado WHERE pro_id = $pro_id LIMIT 1");
+        return mysqli_num_rows($rs) > 0;
+    }
+
     public function insert($data) {
         $sql = "INSERT INTO producto_terminado (pro_id, pro_nombre, tmetal_id, pres_id, bod_id, pro_estado)
                 VALUES (

@@ -37,6 +37,12 @@ class DetalleFundicionDAO extends Connection {
         return $this->execute("SELECT * FROM detalle_fundicion WHERE dfun_id = $dfun_id");
     }
 
+    public function existsById($dfun_id): bool {
+        $dfun_id = (int)$dfun_id;
+        $rs = $this->execute("SELECT 1 FROM detalle_fundicion WHERE dfun_id = $dfun_id LIMIT 1");
+        return mysqli_num_rows($rs) > 0;
+    }
+
     public function insert($data) {
         $sql = "INSERT INTO detalle_fundicion (
                     dfun_id, rfun_id, mat_codigo, Cli_mat, dfun_cantidad, pro_id,

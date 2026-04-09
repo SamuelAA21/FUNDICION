@@ -34,6 +34,7 @@ var listDetalleFundicion = function () {
 
 window.detalleFundicionNuevo = function () {
     $("#frmDetalleFundicion")[0].reset();
+    $("#dfun_id_original").val("");
     $("#dfun_id").prop("readonly", false);
     $("#modalDetalleFundicionTitle").text("Nuevo Detalle Fundicion");
     $("#modalDetalleFundicion").modal("show");
@@ -65,6 +66,7 @@ window.detalleFundicionEditar = function (dfun_id) {
         data: { dfun_id: dfun_id },
         dataType: "json"
     }).done(function (r) {
+        $("#dfun_id_original").val(r.dfun_id || "");
         $("#dfun_id").val(r.dfun_id || "").prop("readonly", true);
         $("#rfun_id").val(r.rfun_id || "");
         $("#df_mat_codigo").val(r.mat_codigo || "");

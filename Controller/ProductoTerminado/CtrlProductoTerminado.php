@@ -45,6 +45,7 @@ class CtrlProductoTerminado extends ProductoTerminadoDAO {
 
         $data = [
             'pro_id' => $_POST['pro_id'] ?? '',
+            'pro_id_original' => $_POST['pro_id_original'] ?? '',
             'pro_nombre' => trim($_POST['pro_nombre'] ?? ''),
             'tmetal_id' => $_POST['tmetal_id'] ?? '',
             'pres_id' => $_POST['pres_id'] ?? '',
@@ -57,10 +58,22 @@ class CtrlProductoTerminado extends ProductoTerminadoDAO {
             return;
         }
 
-        $exists = mysqli_fetch_assoc($this->getById($data['pro_id']));
-        if ($exists) {
-            $this->update($data['pro_id'], $data);
+        $originalId = (int)$data['pro_id_original'];
+        $currentId = (int)$data['pro_id'];
+
+        if ($originalId > 0) {
+            if (!$this->existsById($originalId)) {
+                echo json_encode(['ok' => false, 'msg' => 'El producto a editar ya no existe']);
+                return;
+            }
+
+            $this->update($originalId, $data);
             echo json_encode(['ok' => true, 'msg' => 'Producto terminado actualizado correctamente']);
+            return;
+        }
+
+        if ($this->existsById($currentId)) {
+            echo json_encode(['ok' => false, 'msg' => 'Ya existe un producto terminado con ese ID']);
             return;
         }
 

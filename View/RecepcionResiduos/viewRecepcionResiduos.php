@@ -43,6 +43,7 @@ $URL_RRES_DEL  = getUrl("RecepcionResiduos", "RecepcionResiduos", "del", false, 
             </div>
             <div class="modal-body">
                 <form id="frmRecepcionResiduos">
+                    <input type="hidden" name="rres_id_original" id="rres_id_original">
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label">ID</label>

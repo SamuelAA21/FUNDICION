@@ -30,6 +30,7 @@ var listProductoTerminado = function () {
 
 window.productoTerminadoNuevo = function () {
     $("#frmProductoTerminado")[0].reset();
+    $("#pro_id_original").val("");
     $("#pro_id").prop("readonly", false);
     $("#modalProductoTerminadoTitle").text("Nuevo Producto Terminado");
     $("#modalProductoTerminado").modal("show");
@@ -61,6 +62,7 @@ window.productoTerminadoEditar = function (pro_id) {
         data: { pro_id: pro_id },
         dataType: "json"
     }).done(function (r) {
+        $("#pro_id_original").val(r.pro_id || "");
         $("#pro_id").val(r.pro_id || "").prop("readonly", true);
         $("#pro_nombre").val(r.pro_nombre || "");
         $("#pt_tmetal_id").val(r.tmetal_id || "");

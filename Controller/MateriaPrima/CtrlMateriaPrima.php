@@ -53,6 +53,7 @@ class CtrlMateriaPrima extends MateriaPrimaDAO {
 
         $data = [
             'mat_codigo' => $_POST['mat_codigo'] ?? '',
+            'mat_codigo_original' => $_POST['mat_codigo_original'] ?? '',
             'mat_descripcion' => $_POST['mat_descripcion'] ?? '',
             'mat_peligrosidad' => $_POST['mat_peligrosidad'] ?? '',
             'tmetal_id' => $_POST['tmetal_id'] ?? '',
@@ -70,10 +71,22 @@ class CtrlMateriaPrima extends MateriaPrimaDAO {
             return;
         }
 
-        $exists = mysqli_fetch_assoc($this->getById($data['mat_codigo']));
-        if ($exists) {
-            $this->update($data['mat_codigo'], $data);
+        $originalId = (int)$data['mat_codigo_original'];
+        $currentId = (int)$data['mat_codigo'];
+
+        if ($originalId > 0) {
+            if (!$this->existsById($originalId)) {
+                echo json_encode(['ok' => false, 'msg' => 'La materia prima a editar ya no existe']);
+                return;
+            }
+
+            $this->update($originalId, $data);
             echo json_encode(['ok' => true, 'msg' => 'Materia prima actualizada correctamente']);
+            return;
+        }
+
+        if ($this->existsById($currentId)) {
+            echo json_encode(['ok' => false, 'msg' => 'Ya existe una materia prima con ese codigo']);
             return;
         }
 

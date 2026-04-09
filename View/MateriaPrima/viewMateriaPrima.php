@@ -43,6 +43,7 @@ $URL_MP_DEL  = getUrl("MateriaPrima", "MateriaPrima", "del", false, true);
             </div>
             <div class="modal-body">
                 <form id="frmMateriaPrima">
+                    <input type="hidden" name="mat_codigo_original" id="mat_codigo_original">
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label">Codigo</label>

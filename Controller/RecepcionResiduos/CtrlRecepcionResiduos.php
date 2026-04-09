@@ -52,6 +52,7 @@ class CtrlRecepcionResiduos extends RecepcionResiduosDAO {
 
         $data = [
             'rres_id' => $_POST['rres_id'] ?? '',
+            'rres_id_original' => $_POST['rres_id_original'] ?? '',
             'rres_fecha_doc' => str_replace('T', ' ', trim($_POST['rres_fecha_doc'] ?? '')),
             'rres_fecha_recepcion' => trim($_POST['rres_fecha_recepcion'] ?? ''),
             'cli_nit' => trim($_POST['cli_nit'] ?? ''),
@@ -75,10 +76,22 @@ class CtrlRecepcionResiduos extends RecepcionResiduosDAO {
             return;
         }
 
-        $exists = mysqli_fetch_assoc($this->getById($data['rres_id']));
-        if ($exists) {
-            $this->update($data['rres_id'], $data);
+        $originalId = (int)$data['rres_id_original'];
+        $currentId = (int)$data['rres_id'];
+
+        if ($originalId > 0) {
+            if (!$this->existsById($originalId)) {
+                echo json_encode(['ok' => false, 'msg' => 'La recepcion a editar ya no existe']);
+                return;
+            }
+
+            $this->update($originalId, $data);
             echo json_encode(['ok' => true, 'msg' => 'Recepcion de residuos actualizada correctamente']);
+            return;
+        }
+
+        if ($this->existsById($currentId)) {
+            echo json_encode(['ok' => false, 'msg' => 'Ya existe una recepcion de residuos con ese ID']);
             return;
         }
 

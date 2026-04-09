@@ -42,6 +42,7 @@ $URL_DFUN_DEL  = getUrl("DetalleFundicion", "DetalleFundicion", "del", false, tr
             </div>
             <div class="modal-body">
                 <form id="frmDetalleFundicion">
+                    <input type="hidden" name="dfun_id_original" id="dfun_id_original">
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label">ID</label>

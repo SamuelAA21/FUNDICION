@@ -40,6 +40,7 @@ var listRecepcionResiduos = function () {
 
 window.recepcionResiduosNuevo = function () {
     $("#frmRecepcionResiduos")[0].reset();
+    $("#rres_id_original").val("");
     $("#rres_id").prop("readonly", false);
     $("#modalRecepcionResiduosTitle").text("Nueva Recepcion Residuos");
     $("#modalRecepcionResiduos").modal("show");
@@ -71,6 +72,7 @@ window.recepcionResiduosEditar = function (rres_id) {
         data: { rres_id: rres_id },
         dataType: "json"
     }).done(function (r) {
+        $("#rres_id_original").val(r.rres_id || "");
         $("#rres_id").val(r.rres_id || "").prop("readonly", true);
         $("#rres_fecha_doc").val(toDatetimeLocal(r.rres_fecha_doc));
         $("#rres_fecha_recepcion").val(r.rres_fecha_recepcion || "");

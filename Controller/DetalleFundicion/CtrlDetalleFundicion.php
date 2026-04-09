@@ -52,6 +52,7 @@ class CtrlDetalleFundicion extends DetalleFundicionDAO {
 
         $data = [
             'dfun_id' => $_POST['dfun_id'] ?? '',
+            'dfun_id_original' => $_POST['dfun_id_original'] ?? '',
             'rfun_id' => $_POST['rfun_id'] ?? '',
             'mat_codigo' => $_POST['mat_codigo'] ?? '',
             'Cli_mat' => trim($_POST['Cli_mat'] ?? ''),
@@ -74,10 +75,22 @@ class CtrlDetalleFundicion extends DetalleFundicionDAO {
             return;
         }
 
-        $exists = mysqli_fetch_assoc($this->getById($data['dfun_id']));
-        if ($exists) {
-            $this->update($data['dfun_id'], $data);
+        $originalId = (int)$data['dfun_id_original'];
+        $currentId = (int)$data['dfun_id'];
+
+        if ($originalId > 0) {
+            if (!$this->existsById($originalId)) {
+                echo json_encode(['ok' => false, 'msg' => 'El detalle de fundicion a editar ya no existe']);
+                return;
+            }
+
+            $this->update($originalId, $data);
             echo json_encode(['ok' => true, 'msg' => 'Detalle fundicion actualizado correctamente']);
+            return;
+        }
+
+        if ($this->existsById($currentId)) {
+            echo json_encode(['ok' => false, 'msg' => 'Ya existe un detalle de fundicion con ese ID']);
             return;
         }
 

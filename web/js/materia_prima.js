@@ -35,6 +35,7 @@ var listMateriaPrima = function () {
 
 window.materiaPrimaNuevo = function () {
     $("#frmMateriaPrima")[0].reset();
+    $("#mat_codigo_original").val("");
     $("#mat_codigo").prop("readonly", false);
     $("#modalMateriaPrimaTitle").text("Nueva Materia Prima");
     $("#modalMateriaPrima").modal("show");
@@ -66,6 +67,7 @@ window.materiaPrimaEditar = function (mat_codigo) {
         data: { mat_codigo: mat_codigo },
         dataType: "json"
     }).done(function (r) {
+        $("#mat_codigo_original").val(r.mat_codigo || "");
         $("#mat_codigo").val(r.mat_codigo || "").prop("readonly", true);
         $("#mat_descripcion").val(r.mat_descripcion || "");
         $("#mat_peligrosidad").val(r.mat_peligrosidad || "");

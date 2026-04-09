@@ -34,6 +34,7 @@ $URL_PT_DEL  = getUrl("ProductoTerminado", "ProductoTerminado", "del", false, tr
             </div>
             <div class="modal-body">
                 <form id="frmProductoTerminado">
+                    <input type="hidden" name="pro_id_original" id="pro_id_original">
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label">ID</label>

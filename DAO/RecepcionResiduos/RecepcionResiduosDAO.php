@@ -41,6 +41,12 @@ class RecepcionResiduosDAO extends Connection {
         return $this->execute("SELECT * FROM recepcion_residuos WHERE rres_id = $rres_id");
     }
 
+    public function existsById($rres_id): bool {
+        $rres_id = (int)$rres_id;
+        $rs = $this->execute("SELECT 1 FROM recepcion_residuos WHERE rres_id = $rres_id LIMIT 1");
+        return mysqli_num_rows($rs) > 0;
+    }
+
     public function insert($data) {
         $sql = "INSERT INTO recepcion_residuos (
                     rres_id, rres_fecha_doc, rres_fecha_recepcion, cli_nit, rres_transportador,

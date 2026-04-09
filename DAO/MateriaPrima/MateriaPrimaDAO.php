@@ -52,6 +52,12 @@ class MateriaPrimaDAO extends Connection {
         return $this->execute("SELECT * FROM materia_prima WHERE mat_codigo = $mat_codigo");
     }
 
+    public function existsById($mat_codigo): bool {
+        $mat_codigo = (int)$mat_codigo;
+        $rs = $this->execute("SELECT 1 FROM materia_prima WHERE mat_codigo = $mat_codigo LIMIT 1");
+        return mysqli_num_rows($rs) > 0;
+    }
+
     public function insert($data) {
         $sql = "INSERT INTO materia_prima (
                     mat_codigo, mat_descripcion, mat_peligrosidad, tmetal_id, ematp_id,
