@@ -33,6 +33,27 @@
     if ($_GET['module'] === 'MateriaPrima') {
         echo '<script src="js/materia_prima.js"></script>';
     }
+    if ($_GET['module'] === 'TipoMetal') {
+        echo '<script src="js/tipo_metal.js"></script>';
+    }
+    if ($_GET['module'] === 'EstadoMateria') {
+        echo '<script src="js/estado_materia.js"></script>';
+    }
+    if ($_GET['module'] === 'Presentacion') {
+        echo '<script src="js/presentacion.js"></script>';
+    }
+    if ($_GET['module'] === 'Bodega') {
+        echo '<script src="js/bodega.js"></script>';
+    }
+    if ($_GET['module'] === 'TipoPeligro') {
+        echo '<script src="js/tipo_peligro.js"></script>';
+    }
+    if ($_GET['module'] === 'TipoVehiculo') {
+        echo '<script src="js/tipo_vehiculo.js"></script>';
+    }
+    if ($_GET['module'] === 'TipoManejo') {
+        echo '<script src="js/tipo_manejo.js"></script>';
+    }
     if ($_GET['module'] === 'ProductoTerminado') {
         echo '<script src="js/producto_terminado.js"></script>';
     }
