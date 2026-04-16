@@ -2,6 +2,18 @@ var tablaCombustible = null;
 
 $(document).ready(function () {
     listCombustible();
+
+    // Evento para editar
+    $(document).on('click', '.btn-edit', function() {
+        var comb_id = $(this).data('id');
+        combustibleEditar(comb_id);
+    });
+
+    // Evento para eliminar
+    $(document).on('click', '.btn-delete', function() {
+        var comb_id = $(this).data('id');
+        combustibleEliminar(comb_id);
+    });
 });
 
 var listCombustible = function () {
@@ -13,7 +25,7 @@ var listCombustible = function () {
         pageLength: 15,
         autoWidth: false,
         ajax: {
-            url: "ajax.php?module=Combustible&controller=Combustible&function=data",
+            url: "ajax.php?module=Combustible&controller=Combustible&function=data&t=" + Date.now(),
             method: "GET"
         },
         deferRender: true,
@@ -21,7 +33,13 @@ var listCombustible = function () {
             { data: "comb_id" },
             { data: "comb_descripcion" },
             { data: "comb_estado" },
-            { data: "acciones" }
+            {
+                data: null,
+                render: function(data, type, row) {
+                    return '<button class="btn btn-sm btn-primary btn-edit" data-id="' + row.comb_id + '">Editar</button> ' +
+                           '<button class="btn btn-sm btn-danger btn-delete" data-id="' + row.comb_id + '">Eliminar</button>';
+                }
+            }
         ]
     });
 };

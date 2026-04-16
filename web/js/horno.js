@@ -2,6 +2,18 @@ var tablaHorno = null;
 
 $(document).ready(function () {
     listHorno();
+
+    // Evento para editar
+    $(document).on('click', '.btn-edit', function() {
+        var hor_id = $(this).data('id');
+        hornoEditar(hor_id);
+    });
+
+    // Evento para eliminar
+    $(document).on('click', '.btn-delete', function() {
+        var hor_id = $(this).data('id');
+        hornoEliminar(hor_id);
+    });
 });
 
 var listHorno = function () {
@@ -13,7 +25,7 @@ var listHorno = function () {
         pageLength: 15,
         autoWidth: false,
         ajax: {
-            url: "ajax.php?module=Horno&controller=Horno&function=data",
+            url: "ajax.php?module=Horno&controller=Horno&function=data&t=" + Date.now(),
             method: "GET"
         },
         deferRender: true,
@@ -22,7 +34,13 @@ var listHorno = function () {
             { data: "hor_descripcion" },
             { data: "com_descripcion" },
             { data: "hor_estado" },
-            { data: "acciones" }
+            {
+                data: null,
+                render: function(data, type, row) {
+                    return '<button class="btn btn-sm btn-primary btn-edit" data-id="' + row.hor_id + '">Editar</button> ' +
+                           '<button class="btn btn-sm btn-danger btn-delete" data-id="' + row.hor_id + '">Eliminar</button>';
+                }
+            }
         ]
     });
 };

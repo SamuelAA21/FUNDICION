@@ -2,6 +2,18 @@ var tablaTipoMetal = null;
 
 $(document).ready(function () {
     listTipoMetal();
+
+    // Evento para editar
+    $(document).on('click', '.btn-edit', function() {
+        var tmetal_id = $(this).data('id');
+        tipoMetalEditar(tmetal_id);
+    });
+
+    // Evento para eliminar
+    $(document).on('click', '.btn-delete', function() {
+        var tmetal_id = $(this).data('id');
+        tipoMetalEliminar(tmetal_id);
+    });
 });
 
 var listTipoMetal = function () {
@@ -13,14 +25,20 @@ var listTipoMetal = function () {
         pageLength: 15,
         autoWidth: false,
         ajax: {
-            url: "ajax.php?module=TipoMetal&controller=TipoMetal&function=data",
+            url: "ajax.php?module=TipoMetal&controller=TipoMetal&function=data&t=" + Date.now(),
             method: "GET"
         },
         columns: [
             { data: "tmetal_id" },
             { data: "tmetal_descripcion" },
             { data: "tmetal_estado" },
-            { data: "acciones" }
+            {
+                data: null,
+                render: function(data, type, row) {
+                    return '<button class="btn btn-sm btn-primary btn-edit" data-id="' + row.tmetal_id + '">Editar</button> ' +
+                           '<button class="btn btn-sm btn-danger btn-delete" data-id="' + row.tmetal_id + '">Eliminar</button>';
+                }
+            }
         ]
     });
 };

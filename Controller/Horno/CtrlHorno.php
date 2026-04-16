@@ -26,11 +26,6 @@ class CtrlHorno extends HornoDAO {
             $array['data'][$i]['hor_estado'] = ($row['hor_estado'] == 1) ? "Activo" : "Inactivo";
 
             $id = $hor_id;
-            $array['data'][$i]['acciones'] =
-                "<button class='btn btn-sm btn-primary' onclick=\"hornoEditar('$id')\">Editar</button> " .
-                "<button class='btn btn-sm btn-danger' onclick=\"hornoEliminar('$id')\">Eliminar</button>";
-
-            $i++;
         }
 
         echo json_encode($array);
@@ -72,7 +67,7 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $this->insertRecord($hor_descripcion, $com_id, $hor_estado);
+        $this->insert($hor_descripcion, $com_id, $hor_estado);
         echo json_encode(["ok"=>true, "msg"=>"Horno creado correctamente"]);
     }
 
@@ -94,11 +89,11 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $this->updateRecord($hor_id, $hor_descripcion, $com_id, $hor_estado);
+        $this->update($hor_id, $hor_descripcion, $com_id, $hor_estado);
         echo json_encode(["ok"=>true, "msg"=>"Horno actualizado correctamente"]);
     }
 
-    public function delete(){
+    public function del(){
         header('Content-Type: application/json; charset=utf-8');
 
         $hor_id = $_POST['hor_id'] ?? 0;
@@ -108,7 +103,7 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $this->deleteRecord($hor_id);
+        $this->delete($hor_id);
         echo json_encode(["ok"=>true, "msg"=>"Horno eliminado correctamente"]);
     }
 }

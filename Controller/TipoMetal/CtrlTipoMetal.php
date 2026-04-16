@@ -9,17 +9,14 @@ class CtrlTipoMetal extends TipoMetalDAO {
 
     public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $list = $this->getAll();
+        $rs = $this->getAll();
         $array = ['data' => []];
 
-        while ($row = mysqli_fetch_assoc($list)) {
+        while ($row = mysqli_fetch_assoc($rs)) {
             $array['data'][] = [
                 'tmetal_id' => $row['tmetal_id'],
                 'tmetal_descripcion' => $row['tmetal_descripcion'],
-                'tmetal_estado' => ($row['tmetal_estado'] == 1) ? "Activo" : "Inactivo",
-                'acciones' =>
-                    "<button class='btn btn-sm btn-primary' onclick=\"tipoMetalEditar('{$row['tmetal_id']}')\">Editar</button> " .
-                    "<button class='btn btn-sm btn-danger' onclick=\"tipoMetalEliminar('{$row['tmetal_id']}')\">Eliminar</button>"
+                'tmetal_estado' => ($row['tmetal_estado'] == 1) ? "Activo" : "Inactivo"
             ];
         }
 
