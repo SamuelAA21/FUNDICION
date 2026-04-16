@@ -16,11 +16,9 @@
         <div class="col-md-10 col-sm-9">
           <ul class="site_menu text_align_right">
             <li><a href="index.php">Home</a></li>
-            <li><a href="<?php echo getUrl('Cliente','Cliente','read'); ?>">Clientes</a></li>
             <li><a href="<?php echo getUrl('Combustible','Combustible','read'); ?>">Combustible</a></li>
             <li><a href="<?php echo getUrl('Horno','Horno','read'); ?>">Horno</a></li>
-            <li><a href="<?php echo getUrl('MateriaPrima','MateriaPrima','read'); ?>">Materia Prima</a></li>
-            <li><a href="<?php echo getUrl('ProductoTerminado','ProductoTerminado','read'); ?>">Producto Terminado</a></li>
+            <li><a href="<?php echo getUrl('TipoMetal','TipoMetal','read'); ?>">Tipo Metal</a></li>
             <li>
               <button class="openbtn" onclick="openNav()"><img src="images/menu_icon.png" alt=""></button>
             </li>

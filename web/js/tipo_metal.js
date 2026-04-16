@@ -27,15 +27,16 @@ var listTipoMetal = function () {
 
 window.tipoMetalNuevo = function () {
     $("#frmTipoMetal")[0].reset();
-    $("#tmetal_id_original").val("");
-    $("#tmetal_id").prop("readonly", false);
+    $("#tmetal_id").val("");
     $("#modalTipoMetalTitle").text("Nuevo Tipo Metal");
     $("#modalTipoMetal").modal("show");
 };
 
 window.tipoMetalGuardar = function () {
+    var url = ($("#tmetal_id").val() === "") ? URL_TM_POSTNEW : URL_TM_UPDATE;
+
     $.ajax({
-        url: URL_TM_SAVE,
+        url: url,
         type: "POST",
         data: $("#frmTipoMetal").serialize(),
         dataType: "json"
@@ -59,10 +60,9 @@ window.tipoMetalEditar = function (tmetal_id) {
         data: { tmetal_id: tmetal_id },
         dataType: "json"
     }).done(function (r) {
-        $("#tmetal_id_original").val(r.tmetal_id || "");
-        $("#tmetal_id").val(r.tmetal_id || "").prop("readonly", true);
+        $("#tmetal_id").val(r.tmetal_id || "");
         $("#tmetal_descripcion").val(r.tmetal_descripcion || "");
-        $("#tmetal_estado").val(r.tmetal_estado || "Activo");
+        $("#tmetal_estado").val((r.tmetal_estado == 0) ? "0" : "1");
         $("#modalTipoMetalTitle").text("Editar Tipo Metal");
         $("#modalTipoMetal").modal("show");
     }).fail(function () {
@@ -81,7 +81,7 @@ window.tipoMetalEliminar = function (tmetal_id) {
         if (!ok) return;
 
         $.ajax({
-            url: URL_TM_DEL,
+            url: URL_TM_DELETE,
             type: "POST",
             data: { tmetal_id: tmetal_id },
             dataType: "json"

@@ -1,7 +1,8 @@
 <?php
-$URL_HORNO_SAVE = getUrl("Horno","Horno","save",false,true);
-$URL_HORNO_ONE  = getUrl("Horno","Horno","one",false,true);
-$URL_HORNO_DEL  = getUrl("Horno","Horno","del",false,true);
+$URL_HORNO_POSTNEW = getUrl("Horno","Horno","postNew",false,true);
+$URL_HORNO_UPDATE  = getUrl("Horno","Horno","update",false,true);
+$URL_HORNO_ONE     = getUrl("Horno","Horno","one",false,true);
+$URL_HORNO_DELETE  = getUrl("Horno","Horno","delete",false,true);
 ?>
 <div class="container mt-4">
 
@@ -85,7 +86,8 @@ $URL_HORNO_DEL  = getUrl("Horno","Horno","del",false,true);
 </div>
 
 <script>
-const URL_HORNO_SAVE = "<?= $URL_HORNO_SAVE ?>";
-const URL_HORNO_ONE  = "<?= $URL_HORNO_ONE ?>";
-const URL_HORNO_DEL  = "<?= $URL_HORNO_DEL ?>";
+const URL_HORNO_POSTNEW = "<?= $URL_HORNO_POSTNEW ?>";
+const URL_HORNO_UPDATE  = "<?= $URL_HORNO_UPDATE ?>";
+const URL_HORNO_ONE     = "<?= $URL_HORNO_ONE ?>";
+const URL_HORNO_DELETE  = "<?= $URL_HORNO_DELETE ?>";
 </script>

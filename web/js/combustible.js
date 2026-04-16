@@ -39,8 +39,10 @@ window.combustibleNuevo = function () {
 
 window.combustibleGuardar = function () {
 
+    var url = ($("#comb_id").val() === "") ? URL_COMBUSTIBLE_POSTNEW : URL_COMBUSTIBLE_UPDATE;
+
     $.ajax({
-        url: URL_COMBUSTIBLE_SAVE,
+        url: url,
         type: "POST",
         data: $("#frmCombustible").serialize(),
         dataType: "json"
@@ -96,7 +98,7 @@ window.combustibleEliminar = function(comb_id) {
         if (!ok) return;
 
         $.ajax({
-            url: URL_COMBUSTIBLE_DEL,
+            url: URL_COMBUSTIBLE_DELETE,
             type: "POST",
             data: { comb_id: comb_id },
             dataType: "json"

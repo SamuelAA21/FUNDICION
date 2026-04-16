@@ -1,8 +1,9 @@
 <?php
 // URLs Ajax siguiendo su helper getUrl(...)
-$URL_COMBUSTIBLE_SAVE = getUrl("Combustible","Combustible","save",false,true);
-$URL_COMBUSTIBLE_ONE  = getUrl("Combustible","Combustible","one",false,true);
-$URL_COMBUSTIBLE_DEL  = getUrl("Combustible","Combustible","del",false,true);
+$URL_COMBUSTIBLE_POSTNEW = getUrl("Combustible","Combustible","postNew",false,true);
+$URL_COMBUSTIBLE_UPDATE  = getUrl("Combustible","Combustible","update",false,true);
+$URL_COMBUSTIBLE_ONE     = getUrl("Combustible","Combustible","one",false,true);
+$URL_COMBUSTIBLE_DELETE  = getUrl("Combustible","Combustible","delete",false,true);
 ?>
 <div class="container mt-4">
 
@@ -65,7 +66,8 @@ $URL_COMBUSTIBLE_DEL  = getUrl("Combustible","Combustible","del",false,true);
 </div>
 
 <script>
-const URL_COMBUSTIBLE_SAVE = "<?= $URL_COMBUSTIBLE_SAVE ?>";
-const URL_COMBUSTIBLE_ONE  = "<?= $URL_COMBUSTIBLE_ONE ?>";
-const URL_COMBUSTIBLE_DEL  = "<?= $URL_COMBUSTIBLE_DEL ?>";
+const URL_COMBUSTIBLE_POSTNEW = "<?= $URL_COMBUSTIBLE_POSTNEW ?>";
+const URL_COMBUSTIBLE_UPDATE  = "<?= $URL_COMBUSTIBLE_UPDATE ?>";
+const URL_COMBUSTIBLE_ONE     = "<?= $URL_COMBUSTIBLE_ONE ?>";
+const URL_COMBUSTIBLE_DELETE  = "<?= $URL_COMBUSTIBLE_DELETE ?>";
 </script>

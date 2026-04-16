@@ -16,7 +16,7 @@ class CtrlTipoMetal extends TipoMetalDAO {
             $array['data'][] = [
                 'tmetal_id' => $row['tmetal_id'],
                 'tmetal_descripcion' => $row['tmetal_descripcion'],
-                'tmetal_estado' => $row['tmetal_estado'],
+                'tmetal_estado' => ($row['tmetal_estado'] == 1) ? "Activo" : "Inactivo",
                 'acciones' =>
                     "<button class='btn btn-sm btn-primary' onclick=\"tipoMetalEditar('{$row['tmetal_id']}')\">Editar</button> " .
                     "<button class='btn btn-sm btn-danger' onclick=\"tipoMetalEliminar('{$row['tmetal_id']}')\">Eliminar</button>"
@@ -34,45 +34,38 @@ class CtrlTipoMetal extends TipoMetalDAO {
         echo json_encode($row ?: []);
     }
 
-    public function save() {
+    public function postNew() {
         header('Content-Type: application/json; charset=utf-8');
 
-        $data = [
-            'tmetal_id' => $_POST['tmetal_id'] ?? '',
-            'tmetal_id_original' => $_POST['tmetal_id_original'] ?? '',
-            'tmetal_descripcion' => trim($_POST['tmetal_descripcion'] ?? ''),
-            'tmetal_estado' => trim($_POST['tmetal_estado'] ?? '')
-        ];
+        $tmetal_descripcion = trim($_POST['tmetal_descripcion'] ?? '');
+        $tmetal_estado = trim($_POST['tmetal_estado'] ?? '1');
 
-        if ((int)$data['tmetal_id'] <= 0 || $data['tmetal_descripcion'] === '' || $data['tmetal_estado'] === '') {
+        if ($tmetal_descripcion === '' || $tmetal_estado === '') {
             echo json_encode(['ok' => false, 'msg' => 'Complete los campos obligatorios']);
             return;
         }
 
-        $originalId = (int)$data['tmetal_id_original'];
-        $currentId = (int)$data['tmetal_id'];
-
-        if ($originalId > 0) {
-            if (!$this->existsById($originalId)) {
-                echo json_encode(['ok' => false, 'msg' => 'El tipo de metal a editar ya no existe']);
-                return;
-            }
-
-            $this->update($originalId, $data);
-            echo json_encode(['ok' => true, 'msg' => 'Tipo de metal actualizado correctamente']);
-            return;
-        }
-
-        if ($this->existsById($currentId)) {
-            echo json_encode(['ok' => false, 'msg' => 'Ya existe un tipo de metal con ese ID']);
-            return;
-        }
-
-        $this->insert($data);
+        $this->insertRecord($tmetal_descripcion, $tmetal_estado);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal creado correctamente']);
     }
 
-    public function del() {
+    public function update() {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $tmetal_id = isset($_POST['tmetal_id']) ? (int)$_POST['tmetal_id'] : 0;
+        $tmetal_descripcion = trim($_POST['tmetal_descripcion'] ?? '');
+        $tmetal_estado = trim($_POST['tmetal_estado'] ?? '1');
+
+        if ($tmetal_id <= 0 || $tmetal_descripcion === '' || $tmetal_estado === '') {
+            echo json_encode(['ok' => false, 'msg' => 'Complete los campos obligatorios']);
+            return;
+        }
+
+        $this->updateRecord($tmetal_id, $tmetal_descripcion, $tmetal_estado);
+        echo json_encode(['ok' => true, 'msg' => 'Tipo de metal actualizado correctamente']);
+    }
+
+    public function delete() {
         header('Content-Type: application/json; charset=utf-8');
         $tmetal_id = isset($_POST['tmetal_id']) ? (int)$_POST['tmetal_id'] : 0;
 
@@ -81,7 +74,7 @@ class CtrlTipoMetal extends TipoMetalDAO {
             return;
         }
 
-        $this->delete($tmetal_id);
+        $this->deleteRecord($tmetal_id);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal eliminado correctamente']);
     }
 }

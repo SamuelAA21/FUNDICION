@@ -23,7 +23,7 @@ class HornoDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function insert($hor_descripcion, $com_id, $hor_estado) {
+    public function insertRecord($hor_descripcion, $com_id, $hor_estado) {
         $hor_descripcion = mysqli_real_escape_string($this->getConnect(), $hor_descripcion);
         $com_id = (int)$com_id;
         $hor_estado = (int)$hor_estado;
@@ -32,7 +32,7 @@ class HornoDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function update($hor_id, $hor_descripcion, $com_id, $hor_estado) {
+    public function updateRecord($hor_id, $hor_descripcion, $com_id, $hor_estado) {
         $hor_id = (int)$hor_id;
         $hor_descripcion = mysqli_real_escape_string($this->getConnect(), $hor_descripcion);
         $com_id = (int)$com_id;
@@ -42,7 +42,7 @@ class HornoDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function delete($hor_id) {
+    public function deleteRecord($hor_id) {
         $hor_id = (int)$hor_id;
         $sql = "DELETE FROM horno WHERE hor_id = $hor_id";
         return $this->execute($sql);

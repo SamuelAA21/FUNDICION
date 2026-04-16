@@ -35,26 +35,24 @@ class TipoMetalDAO extends Connection {
         return mysqli_num_rows($rs) > 0;
     }
 
-    public function insert($data) {
-        $sql = "INSERT INTO tipo_metal (tmetal_id, tmetal_descripcion, tmetal_estado)
-                VALUES (
-                    " . (int)$data['tmetal_id'] . ",
-                    " . $this->str($data['tmetal_descripcion']) . ",
-                    " . $this->str($data['tmetal_estado']) . "
-                )";
+    public function insertRecord($tmetal_descripcion, $tmetal_estado) {
+        $tmetal_descripcion = $this->esc($tmetal_descripcion);
+        $tmetal_estado = (int)$tmetal_estado;
+
+        $sql = "INSERT INTO tipo_metal (tmetal_descripcion, tmetal_estado) VALUES ('$tmetal_descripcion', $tmetal_estado)";
         return $this->execute($sql);
     }
 
-    public function update($tmetal_id, $data) {
+    public function updateRecord($tmetal_id, $tmetal_descripcion, $tmetal_estado) {
         $tmetal_id = (int)$tmetal_id;
-        $sql = "UPDATE tipo_metal SET
-                    tmetal_descripcion = " . $this->str($data['tmetal_descripcion']) . ",
-                    tmetal_estado = " . $this->str($data['tmetal_estado']) . "
-                WHERE tmetal_id = $tmetal_id";
+        $tmetal_descripcion = $this->esc($tmetal_descripcion);
+        $tmetal_estado = (int)$tmetal_estado;
+
+        $sql = "UPDATE tipo_metal SET tmetal_descripcion = '$tmetal_descripcion', tmetal_estado = $tmetal_estado WHERE tmetal_id = $tmetal_id";
         return $this->execute($sql);
     }
 
-    public function delete($tmetal_id) {
+    public function deleteRecord($tmetal_id) {
         $tmetal_id = (int)$tmetal_id;
         return $this->execute("DELETE FROM tipo_metal WHERE tmetal_id = $tmetal_id");
     }

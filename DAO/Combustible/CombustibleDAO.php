@@ -22,7 +22,7 @@ class CombustibleDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function insert($comb_descripcion, $comb_estado) {
+    public function insertRecord($comb_descripcion, $comb_estado) {
         $comb_descripcion = mysqli_real_escape_string($this->getConnect(), $comb_descripcion);
         $comb_estado = (int)$comb_estado;
 
@@ -31,7 +31,7 @@ class CombustibleDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function update($comb_id, $comb_descripcion, $comb_estado) {
+    public function updateRecord($comb_id, $comb_descripcion, $comb_estado) {
         $comb_id = (int)$comb_id;
         $comb_descripcion = mysqli_real_escape_string($this->getConnect(), $comb_descripcion);
         $comb_estado = (int)$comb_estado;
@@ -43,7 +43,7 @@ class CombustibleDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function delete($comb_id) {
+    public function deleteRecord($comb_id) {
         $comb_id = (int)$comb_id;
         $sql = "DELETE FROM combustible WHERE com_id = $comb_id";
         return $this->execute($sql);

@@ -1,7 +1,8 @@
 <?php
-$URL_TM_SAVE = getUrl("TipoMetal", "TipoMetal", "save", false, true);
-$URL_TM_ONE  = getUrl("TipoMetal", "TipoMetal", "one", false, true);
-$URL_TM_DEL  = getUrl("TipoMetal", "TipoMetal", "del", false, true);
+$URL_TM_POSTNEW = getUrl("TipoMetal", "TipoMetal", "postNew", false, true);
+$URL_TM_UPDATE  = getUrl("TipoMetal", "TipoMetal", "update", false, true);
+$URL_TM_ONE     = getUrl("TipoMetal", "TipoMetal", "one", false, true);
+$URL_TM_DELETE  = getUrl("TipoMetal", "TipoMetal", "delete", false, true);
 ?>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -35,11 +36,7 @@ $URL_TM_DEL  = getUrl("TipoMetal", "TipoMetal", "del", false, true);
             </div>
             <div class="modal-body">
                 <form id="frmTipoMetal">
-                    <input type="hidden" name="tmetal_id_original" id="tmetal_id_original">
-                    <div class="mb-3">
-                        <label class="form-label">ID</label>
-                        <input type="number" class="form-control" name="tmetal_id" id="tmetal_id" required>
-                    </div>
+                    <input type="hidden" name="tmetal_id" id="tmetal_id">
                     <div class="mb-3">
                         <label class="form-label">Descripcion</label>
                         <input type="text" class="form-control" name="tmetal_descripcion" id="tmetal_descripcion" maxlength="30" required>
@@ -47,8 +44,8 @@ $URL_TM_DEL  = getUrl("TipoMetal", "TipoMetal", "del", false, true);
                     <div class="mb-3">
                         <label class="form-label">Estado</label>
                         <select class="form-select" name="tmetal_estado" id="tmetal_estado" required>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
                         </select>
                     </div>
                 </form>
@@ -62,7 +59,8 @@ $URL_TM_DEL  = getUrl("TipoMetal", "TipoMetal", "del", false, true);
 </div>
 
 <script>
-const URL_TM_SAVE = "<?= $URL_TM_SAVE ?>";
-const URL_TM_ONE  = "<?= $URL_TM_ONE ?>";
-const URL_TM_DEL  = "<?= $URL_TM_DEL ?>";
+const URL_TM_POSTNEW = "<?= $URL_TM_POSTNEW ?>";
+const URL_TM_UPDATE  = "<?= $URL_TM_UPDATE ?>";
+const URL_TM_ONE     = "<?= $URL_TM_ONE ?>";
+const URL_TM_DELETE  = "<?= $URL_TM_DELETE ?>";
 </script>

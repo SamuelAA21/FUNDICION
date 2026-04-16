@@ -9,15 +9,14 @@ class CtrlCombustible extends CombustibleDAO {
     }
 
     public function data(){
-        $list = $this->getAll();
-        $array = [];
+        $rs = $this->getAll();
+        $array = ['data' => []];
         $i = 0;
 
-        foreach($list as $row){
-
-            $array['data'][$i]['comb_id'] = $row['com_id'] ?? $row['comb_id'];
-            $array['data'][$i]['comb_descripcion'] = $row['com_descripcion'] ?? $row['comb_descripcion'];
-            $array['data'][$i]['comb_estado'] = ((isset($row['com_estado']) ? $row['com_estado'] : ($row['comb_estado'] ?? 0)) == 1) ? "Activo" : "Inactivo";
+        while($row = mysqli_fetch_assoc($rs)){
+            $array['data'][$i]['comb_id'] = $row['com_id'];
+            $array['data'][$i]['comb_descripcion'] = $row['com_descripcion'];
+            $array['data'][$i]['comb_estado'] = ($row['com_estado'] == 1) ? "Activo" : "Inactivo";
 
             $id = $array['data'][$i]['comb_id'];
             $array['data'][$i]['acciones'] =
@@ -43,8 +42,7 @@ class CtrlCombustible extends CombustibleDAO {
         }
     }
 
-    public function save(){
-        $comb_id = $_POST['comb_id'] ?? '';
+    public function postNew(){
         $comb_descripcion = trim($_POST['comb_descripcion'] ?? '');
         $comb_estado = $_POST['comb_estado'] ?? 1;
 
@@ -53,17 +51,25 @@ class CtrlCombustible extends CombustibleDAO {
             return;
         }
 
-        if($comb_id === '' || (int)$comb_id === 0){
-            $this->insert($comb_descripcion, $comb_estado);
-            echo json_encode(["ok"=>true, "msg"=>"Combustible creado correctamente"]);
+        $this->insertRecordRecord($comb_descripcion, $comb_estado);
+        echo json_encode(["ok"=>true, "msg"=>"Combustible creado correctamente"]);
+    }
+
+    public function update(){
+        $comb_id = $_POST['comb_id'] ?? 0;
+        $comb_descripcion = trim($_POST['comb_descripcion'] ?? '');
+        $comb_estado = $_POST['comb_estado'] ?? 1;
+
+        if($comb_descripcion === '' || (int)$comb_id <= 0){
+            echo json_encode(["ok"=>false, "msg"=>"Datos inválidos"]);
             return;
         }
-//No editarlo automaticamente cuando coincidan los ID. (Error de autoincremento)
-        $this->update($comb_id, $comb_descripcion, $comb_estado);
+
+        $this->updateRecord($comb_id, $comb_descripcion, $comb_estado);
         echo json_encode(["ok"=>true, "msg"=>"Combustible actualizado correctamente"]);
     }
 
-    public function del(){
+    public function delete(){
         $comb_id = $_POST['comb_id'] ?? 0;
 
         if((int)$comb_id <= 0){
@@ -71,7 +77,7 @@ class CtrlCombustible extends CombustibleDAO {
             return;
         }
 
-        $this->delete($comb_id);
+        $this->deleteRecord($comb_id);
         echo json_encode(["ok"=>true, "msg"=>"Combustible eliminado correctamente"]);
     }
 }

@@ -59,8 +59,10 @@ window.hornoGuardar = function () {
         return;
     }
 
+    var url = ($("#hor_id").val() === "") ? URL_HORNO_POSTNEW : URL_HORNO_UPDATE;
+
     $.ajax({
-        url: URL_HORNO_SAVE,
+        url: url,
         type: "POST",
         data: $("#frmHorno").serialize(),
         dataType: "json"
@@ -134,7 +136,7 @@ window.hornoEliminar = function(hor_id) {
         if (!ok) return;
 
         $.ajax({
-            url: URL_HORNO_DEL,
+            url: URL_HORNO_DELETE,
             type: "POST",
             data: { hor_id: id },
             dataType: "json"

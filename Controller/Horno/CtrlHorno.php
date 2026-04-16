@@ -13,16 +13,12 @@ class CtrlHorno extends HornoDAO {
 
     public function data(){
         header('Content-Type: application/json; charset=utf-8');
-        $list = $this->getAll();
-        $array = [];
+        $rs = $this->getAll();
+        $array = ['data' => []];
         $i = 0;
 
-        foreach($list as $row){
-            $hor_id = isset($row['hor_id']) ? (int)$row['hor_id'] : 0;
-            if ($hor_id <= 0) {
-                // Ignorar filas invalidas o malformadas (ID 0 ó no numérico)
-                continue;
-            }
+        while($row = mysqli_fetch_assoc($rs)){
+            $hor_id = (int)$row['hor_id'];
 
             $array['data'][$i]['hor_id'] = $hor_id;
             $array['data'][$i]['hor_descripcion'] = $row['hor_descripcion'];
@@ -59,10 +55,9 @@ class CtrlHorno extends HornoDAO {
         }
     }
 
-    public function save(){
+    public function postNew(){
         header('Content-Type: application/json; charset=utf-8');
 
-        $hor_id = isset($_POST['hor_id']) ? (int)$_POST['hor_id'] : 0;
         $hor_descripcion = trim($_POST['hor_descripcion'] ?? '');
         $com_id = isset($_POST['com_id']) ? (int)$_POST['com_id'] : 0;
         $hor_estado = isset($_POST['hor_estado']) ? (int)$_POST['hor_estado'] : 1;
@@ -77,17 +72,33 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        if($hor_id === '' || (int)$hor_id === 0){
-            $this->insert($hor_descripcion, $com_id, $hor_estado);
-            echo json_encode(["ok"=>true, "msg"=>"Horno creado correctamente"]);
+        $this->insertRecord($hor_descripcion, $com_id, $hor_estado);
+        echo json_encode(["ok"=>true, "msg"=>"Horno creado correctamente"]);
+    }
+
+    public function update(){
+        header('Content-Type: application/json; charset=utf-8');
+
+        $hor_id = isset($_POST['hor_id']) ? (int)$_POST['hor_id'] : 0;
+        $hor_descripcion = trim($_POST['hor_descripcion'] ?? '');
+        $com_id = isset($_POST['com_id']) ? (int)$_POST['com_id'] : 0;
+        $hor_estado = isset($_POST['hor_estado']) ? (int)$_POST['hor_estado'] : 1;
+
+        if($hor_descripcion === '' || $hor_id <= 0){
+            echo json_encode(["ok"=>false, "msg"=>"Datos inválidos"]);
             return;
         }
 
-        $this->update($hor_id, $hor_descripcion, $com_id, $hor_estado);
+        if((int)$com_id <= 0){
+            echo json_encode(["ok"=>false, "msg"=>"Seleccione un combustible válido"]);
+            return;
+        }
+
+        $this->updateRecord($hor_id, $hor_descripcion, $com_id, $hor_estado);
         echo json_encode(["ok"=>true, "msg"=>"Horno actualizado correctamente"]);
     }
 
-    public function del(){
+    public function delete(){
         header('Content-Type: application/json; charset=utf-8');
 
         $hor_id = $_POST['hor_id'] ?? 0;
@@ -97,7 +108,7 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $this->delete($hor_id);
+        $this->deleteRecord($hor_id);
         echo json_encode(["ok"=>true, "msg"=>"Horno eliminado correctamente"]);
     }
 }
