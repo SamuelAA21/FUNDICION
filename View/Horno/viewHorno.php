@@ -32,7 +32,9 @@ $URL_HORNO_DELETE  = getUrl("Horno","Horno","delete",false,true);
 
       <div class="modal-header">
         <h5 class="modal-title" id="modalHornoTitle">Nuevo Horno</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+        </button>
       </div>
 
       <div class="modal-body">
@@ -77,7 +79,7 @@ $URL_HORNO_DELETE  = getUrl("Horno","Horno","delete",false,true);
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" onclick="hornoGuardar()">Guardar</button>
       </div>
 

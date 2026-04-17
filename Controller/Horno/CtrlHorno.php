@@ -4,74 +4,71 @@ include_once '../DAO/Combustible/CombustibleDAO.php';
 
 class CtrlHorno extends HornoDAO {
 
-    public function read(){
-        // Cargar lista de combustibles para el select
+    public function read() {
         $combustibleDAO = CombustibleDAO::getInstance();
         $combustibles = $combustibleDAO->getAll();
         include_once '../View/Horno/viewHorno.php';
     }
 
-    public function data(){
+    public function data() {
         header('Content-Type: application/json; charset=utf-8');
         $rs = $this->getAll();
         $array = ['data' => []];
-        $i = 0;
 
-        while($row = mysqli_fetch_assoc($rs)){
+        while ($row = mysqli_fetch_assoc($rs)) {
             $hor_id = (int)$row['hor_id'];
+            $estadoRaw = trim((string)($row['hor_estado'] ?? '0'));
+            $estado = ($estadoRaw === '1' || strcasecmp($estadoRaw, 'activo') === 0) ? 'Activo' : 'Inactivo';
 
-            $array['data'][$i]['hor_id'] = $hor_id;
-            $array['data'][$i]['hor_descripcion'] = $row['hor_descripcion'];
-            $array['data'][$i]['com_descripcion'] = $row['com_descripcion'] ?? 'Sin combustible';
-            $array['data'][$i]['hor_estado'] = ($row['hor_estado'] == 1) ? "Activo" : "Inactivo";
-
-            $id = $hor_id;
+            $array['data'][] = [
+                'hor_id' => $hor_id,
+                'hor_descripcion' => $row['hor_descripcion'],
+                'com_descripcion' => $row['com_descripcion'] ?? 'Sin combustible',
+                'hor_estado' => $estado,
+                'acciones' => '<button class="btn btn-sm btn-primary btn-edit" data-id="' . $hor_id . '">Editar</button> '
+                    . '<button class="btn btn-sm btn-danger btn-delete" data-id="' . $hor_id . '">Eliminar</button>'
+            ];
         }
 
         echo json_encode($array);
     }
 
-    public function one(){
+    public function one() {
         header('Content-Type: application/json; charset=utf-8');
         $hor_id = isset($_POST['hor_id']) ? (int)$_POST['hor_id'] : 0;
 
         if ($hor_id <= 0) {
-            echo json_encode(["ok"=>false, "msg"=>"ID inválido"]);
+            echo json_encode(['ok' => false, 'msg' => 'ID invalido']);
             return;
         }
 
         $rs = $this->getById($hor_id);
         $row = mysqli_fetch_assoc($rs);
-
-        if($row){
-            echo json_encode($row);
-        }else{
-            echo json_encode([]);
-        }
+        echo json_encode($row ?: []);
     }
 
-    public function postNew(){
+    public function postNew() {
         header('Content-Type: application/json; charset=utf-8');
 
         $hor_descripcion = trim($_POST['hor_descripcion'] ?? '');
         $com_id = isset($_POST['com_id']) ? (int)$_POST['com_id'] : 0;
         $hor_estado = isset($_POST['hor_estado']) ? (int)$_POST['hor_estado'] : 1;
 
-        if($hor_descripcion === ''){
-            echo json_encode(["ok"=>false, "msg"=>"La descripción es obligatoria"]);
+        if ($hor_descripcion === '') {
+            echo json_encode(['ok' => false, 'msg' => 'La descripcion es obligatoria']);
             return;
         }
 
-        if((int)$com_id <= 0){
-            echo json_encode(["ok"=>false, "msg"=>"Seleccione un combustible válido"]);
+        if ($com_id <= 0) {
+            echo json_encode(['ok' => false, 'msg' => 'Seleccione un combustible valido']);
             return;
         }
 
-        $this->insert($hor_descripcion, $com_id, $hor_estado);
-        echo json_encode(["ok"=>true, "msg"=>"Horno creado correctamente"]);
+        $this->insertRecord($hor_descripcion, $com_id, $hor_estado);
+        echo json_encode(['ok' => true, 'msg' => 'Horno creado correctamente']);
     }
 
-    public function update(){
+    public function update() {
         header('Content-Type: application/json; charset=utf-8');
 
         $hor_id = isset($_POST['hor_id']) ? (int)$_POST['hor_id'] : 0;
@@ -79,31 +76,30 @@ class CtrlHorno extends HornoDAO {
         $com_id = isset($_POST['com_id']) ? (int)$_POST['com_id'] : 0;
         $hor_estado = isset($_POST['hor_estado']) ? (int)$_POST['hor_estado'] : 1;
 
-        if($hor_descripcion === '' || $hor_id <= 0){
-            echo json_encode(["ok"=>false, "msg"=>"Datos inválidos"]);
+        if ($hor_id <= 0 || $hor_descripcion === '') {
+            echo json_encode(['ok' => false, 'msg' => 'Datos invalidos']);
             return;
         }
 
-        if((int)$com_id <= 0){
-            echo json_encode(["ok"=>false, "msg"=>"Seleccione un combustible válido"]);
+        if ($com_id <= 0) {
+            echo json_encode(['ok' => false, 'msg' => 'Seleccione un combustible valido']);
             return;
         }
 
-        $this->update($hor_id, $hor_descripcion, $com_id, $hor_estado);
-        echo json_encode(["ok"=>true, "msg"=>"Horno actualizado correctamente"]);
+        $this->updateRecord($hor_id, $hor_descripcion, $com_id, $hor_estado);
+        echo json_encode(['ok' => true, 'msg' => 'Horno actualizado correctamente']);
     }
 
-    public function del(){
+    public function delete() {
         header('Content-Type: application/json; charset=utf-8');
+        $hor_id = isset($_POST['hor_id']) ? (int)$_POST['hor_id'] : 0;
 
-        $hor_id = $_POST['hor_id'] ?? 0;
-
-        if((int)$hor_id <= 0){
-            echo json_encode(["ok"=>false, "msg"=>"ID inválido"]);
+        if ($hor_id <= 0) {
+            echo json_encode(['ok' => false, 'msg' => 'ID invalido']);
             return;
         }
 
-        $this->delete($hor_id);
-        echo json_encode(["ok"=>true, "msg"=>"Horno eliminado correctamente"]);
+        $this->deleteRecord($hor_id);
+        echo json_encode(['ok' => true, 'msg' => 'Horno eliminado correctamente']);
     }
 }
