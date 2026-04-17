@@ -1,7 +1,8 @@
 <?php
-$URL_BOD_SAVE = getUrl("Bodega", "Bodega", "save", false, true);
-$URL_BOD_ONE  = getUrl("Bodega", "Bodega", "one", false, true);
-$URL_BOD_DEL  = getUrl("Bodega", "Bodega", "del", false, true);
+$URL_BOD_POSTNEW = getUrl("Bodega", "Bodega", "postNew", false, true);
+$URL_BOD_UPDATE  = getUrl("Bodega", "Bodega", "update", false, true);
+$URL_BOD_ONE     = getUrl("Bodega", "Bodega", "one", false, true);
+$URL_BOD_DELETE  = getUrl("Bodega", "Bodega", "delete", false, true);
 ?>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -33,11 +34,12 @@ $URL_BOD_DEL  = getUrl("Bodega", "Bodega", "del", false, true);
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalBodegaTitle">Bodega</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="frmBodega">
-                    <input type="hidden" name="bod_id_original" id="bod_id_original">
                     <div class="mb-3">
                         <label class="form-label">ID</label>
                         <input type="number" class="form-control" name="bod_id" id="bod_id_catalogo" required>
@@ -64,7 +66,7 @@ $URL_BOD_DEL  = getUrl("Bodega", "Bodega", "del", false, true);
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onclick="bodegaGuardar()">Guardar</button>
             </div>
         </div>
@@ -72,7 +74,8 @@ $URL_BOD_DEL  = getUrl("Bodega", "Bodega", "del", false, true);
 </div>
 
 <script>
-const URL_BOD_SAVE = "<?= $URL_BOD_SAVE ?>";
-const URL_BOD_ONE  = "<?= $URL_BOD_ONE ?>";
-const URL_BOD_DEL  = "<?= $URL_BOD_DEL ?>";
+const URL_BOD_POSTNEW = "<?= $URL_BOD_POSTNEW ?>";
+const URL_BOD_UPDATE  = "<?= $URL_BOD_UPDATE ?>";
+const URL_BOD_ONE     = "<?= $URL_BOD_ONE ?>";
+const URL_BOD_DELETE  = "<?= $URL_BOD_DELETE ?>";
 </script>

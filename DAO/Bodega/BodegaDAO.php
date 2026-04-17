@@ -35,7 +35,7 @@ class BodegaDAO extends Connection {
         return mysqli_num_rows($rs) > 0;
     }
 
-    public function insert($data) {
+    public function insertRecord($data) {
         $sql = "INSERT INTO bodega (bod_id, bod_descripcion, bod_capacidad, bod_area, bod_estado)
                 VALUES (
                     " . (int)$data['bod_id'] . ",
@@ -47,7 +47,7 @@ class BodegaDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function update($bod_id, $data) {
+    public function updateRecord($bod_id, $data) {
         $bod_id = (int)$bod_id;
         $sql = "UPDATE bodega SET
                     bod_descripcion = " . $this->str($data['bod_descripcion']) . ",
@@ -58,7 +58,7 @@ class BodegaDAO extends Connection {
         return $this->execute($sql);
     }
 
-    public function delete($bod_id) {
+    public function deleteRecord($bod_id) {
         $bod_id = (int)$bod_id;
         return $this->execute("DELETE FROM bodega WHERE bod_id = $bod_id");
     }

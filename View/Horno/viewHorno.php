@@ -51,19 +51,11 @@ $URL_HORNO_DELETE  = getUrl("Horno","Horno","delete",false,true);
                 <label class="form-label">Combustible</label>
                 <select class="form-select" name="com_id" id="com_id" required>
                     <option value="">-- Seleccione --</option>
-                    <?php
-                        if(isset($combustibles)){
-                            while($row = mysqli_fetch_assoc($combustibles)){
-                                $comb_id_val = $row['comb_id'] ?? $row['com_id'] ?? '';
-                                $comb_label = $row['comb_descripcion'] ?? $row['com_descripcion'] ?? '';
-                                $comb_label = trim($comb_label);
-                                if ($comb_id_val === '') {
-                                    continue; // skip bad rows
-                                }
-                                echo "<option value='" . htmlspecialchars($comb_id_val, ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars($comb_label, ENT_QUOTES, 'UTF-8') . "</option>";
-                            }
-                        }
-                    ?>
+                    <?php foreach ($combustibles as $combustible) { ?>
+                        <option value="<?= htmlspecialchars((string)$combustible['id'], ENT_QUOTES, 'UTF-8') ?>">
+                            <?= htmlspecialchars($combustible['descripcion'], ENT_QUOTES, 'UTF-8') ?>
+                        </option>
+                    <?php } ?>
                 </select>
             </div>
 

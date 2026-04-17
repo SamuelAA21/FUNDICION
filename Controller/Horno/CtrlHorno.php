@@ -6,7 +6,16 @@ class CtrlHorno extends HornoDAO {
 
     public function read() {
         $combustibleDAO = CombustibleDAO::getInstance();
-        $combustibles = $combustibleDAO->getAll();
+        $rsCombustibles = $combustibleDAO->getAll();
+        $combustibles = [];
+
+        while ($row = mysqli_fetch_assoc($rsCombustibles)) {
+            $combustibles[] = [
+                'id' => (int)($row['com_id'] ?? 0),
+                'descripcion' => trim((string)($row['com_descripcion'] ?? ''))
+            ];
+        }
+
         include_once '../View/Horno/viewHorno.php';
     }
 

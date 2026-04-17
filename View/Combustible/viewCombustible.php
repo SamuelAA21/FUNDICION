@@ -1,5 +1,4 @@
 <?php
-// URLs Ajax siguiendo su helper getUrl(...)
 $URL_COMBUSTIBLE_POSTNEW = getUrl("Combustible","Combustible","postNew",false,true);
 $URL_COMBUSTIBLE_UPDATE  = getUrl("Combustible","Combustible","update",false,true);
 $URL_COMBUSTIBLE_ONE     = getUrl("Combustible","Combustible","one",false,true);
@@ -32,7 +31,9 @@ $URL_COMBUSTIBLE_DELETE  = getUrl("Combustible","Combustible","delete",false,tru
 
       <div class="modal-header">
         <h5 class="modal-title" id="modalCombustibleTitle">Nuevo Combustible</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+        </button>
       </div>
 
       <div class="modal-body">
@@ -57,7 +58,7 @@ $URL_COMBUSTIBLE_DELETE  = getUrl("Combustible","Combustible","delete",false,tru
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" onclick="combustibleGuardar()">Guardar</button>
       </div>
 
