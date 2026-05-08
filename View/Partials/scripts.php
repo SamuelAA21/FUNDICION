@@ -63,4 +63,7 @@
     if ($_GET['module'] === 'DetalleFundicion') {
         echo '<script src="js/detalle_fundicion.js"></script>';
     }
+    if ($_GET['module'] === 'Fundicion') {
+        echo '<script src="js/fundicion.js"></script>';
+    }
 } ?>
