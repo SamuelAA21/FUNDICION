@@ -1,59 +1,43 @@
 <?php
 include_once '../Lib/Config/conexionSqli.php';
 
-class TipoMetalDAO extends Connection {
-
-    private static $instance = NULL;
-
-    public static function getInstance(): TipoMetalDAO {
-        if (self::$instance == NULL) {
-            self::$instance = new TipoMetalDAO();
-        }
-        return self::$instance;
+class TipoMetalDAO extends Connection
+{
+    public function getAll(): array
+    {
+        return $this->fetchAll('SELECT * FROM tipo_metal ORDER BY tmetal_id');
     }
 
-    private function esc($value) {
-        return mysqli_real_escape_string($this->getConnect(), trim((string)$value));
+    public function getById(int $tmetal_id): ?array
+    {
+        return $this->fetchOne('SELECT * FROM tipo_metal WHERE tmetal_id = ?', 'i', [$tmetal_id]);
     }
 
-    private function str($value) {
-        return "'" . $this->esc($value) . "'";
+    public function existsById(int $tmetal_id): bool
+    {
+        return $this->getById($tmetal_id) !== null;
     }
 
-    public function getAll() {
-        return $this->execute("SELECT * FROM tipo_metal ORDER BY tmetal_id");
+    public function insertRecord(string $tmetal_descripcion, int $tmetal_estado): bool
+    {
+        return $this->executeStatement(
+            'INSERT INTO tipo_metal (tmetal_descripcion, tmetal_estado) VALUES (?, ?)',
+            'si',
+            [trim($tmetal_descripcion), $tmetal_estado]
+        );
     }
 
-    public function getById($tmetal_id) {
-        $tmetal_id = (int)$tmetal_id;
-        return $this->execute("SELECT * FROM tipo_metal WHERE tmetal_id = $tmetal_id");
+    public function updateRecord(int $tmetal_id, string $tmetal_descripcion, int $tmetal_estado): bool
+    {
+        return $this->executeStatement(
+            'UPDATE tipo_metal SET tmetal_descripcion = ?, tmetal_estado = ? WHERE tmetal_id = ?',
+            'sii',
+            [trim($tmetal_descripcion), $tmetal_estado, $tmetal_id]
+        );
     }
 
-    public function existsById($tmetal_id): bool {
-        $tmetal_id = (int)$tmetal_id;
-        $rs = $this->execute("SELECT 1 FROM tipo_metal WHERE tmetal_id = $tmetal_id LIMIT 1");
-        return mysqli_num_rows($rs) > 0;
-    }
-
-    public function insertRecord($tmetal_descripcion, $tmetal_estado) {
-        $tmetal_descripcion = $this->esc($tmetal_descripcion);
-        $tmetal_estado = (int)$tmetal_estado;
-
-        $sql = "INSERT INTO tipo_metal (tmetal_descripcion, tmetal_estado) VALUES ('$tmetal_descripcion', $tmetal_estado)";
-        return $this->execute($sql);
-    }
-
-    public function updateRecord($tmetal_id, $tmetal_descripcion, $tmetal_estado) {
-        $tmetal_id = (int)$tmetal_id;
-        $tmetal_descripcion = $this->esc($tmetal_descripcion);
-        $tmetal_estado = (int)$tmetal_estado;
-
-        $sql = "UPDATE tipo_metal SET tmetal_descripcion = '$tmetal_descripcion', tmetal_estado = $tmetal_estado WHERE tmetal_id = $tmetal_id";
-        return $this->execute($sql);
-    }
-
-    public function deleteRecord($tmetal_id) {
-        $tmetal_id = (int)$tmetal_id;
-        return $this->execute("DELETE FROM tipo_metal WHERE tmetal_id = $tmetal_id");
+    public function deleteRecord(int $tmetal_id): bool
+    {
+        return $this->executeStatement('DELETE FROM tipo_metal WHERE tmetal_id = ?', 'i', [$tmetal_id]);
     }
 }

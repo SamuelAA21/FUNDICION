@@ -9,8 +9,11 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <?php if (($_GET['module'] ?? '') === 'Fundicion') { ?>
+  <link rel="stylesheet" href="css/fundicion.css">
+  <?php } ?>
 
   <!-- Opcionales si tu plantilla los usa -->
   <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
 </head>

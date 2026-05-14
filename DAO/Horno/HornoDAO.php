@@ -1,50 +1,43 @@
 <?php
 include_once '../Lib/Config/conexionSqli.php';
 
-class HornoDAO extends Connection {
-
-    private static $instance = NULL;
-
-    public static function getInstance(): HornoDAO {
-        if (self::$instance == NULL) {
-            self::$instance = new HornoDAO();
-        }
-        return self::$instance;
+class HornoDAO extends Connection
+{
+    public function getAll(): array
+    {
+        return $this->fetchAll(
+            'SELECT h.*, c.com_descripcion
+             FROM horno h
+             LEFT JOIN combustible c ON h.com_id = c.com_id
+             ORDER BY h.hor_id'
+        );
     }
 
-    public function getAll() {
-        $sql = "SELECT h.*, c.com_descripcion FROM horno h LEFT JOIN combustible c ON h.com_id = c.com_id";
-        return $this->execute($sql);
+    public function getById(int $hor_id): ?array
+    {
+        return $this->fetchOne('SELECT * FROM horno WHERE hor_id = ?', 'i', [$hor_id]);
     }
 
-    public function getById($hor_id) {
-        $hor_id = (int)$hor_id;
-        $sql = "SELECT * FROM horno WHERE hor_id = $hor_id";
-        return $this->execute($sql);
+    public function insertRecord(string $hor_descripcion, int $com_id, int $hor_estado): bool
+    {
+        return $this->executeStatement(
+            'INSERT INTO horno (hor_descripcion, com_id, hor_estado) VALUES (?, ?, ?)',
+            'sii',
+            [trim($hor_descripcion), $com_id, $hor_estado]
+        );
     }
 
-    public function insertRecord($hor_descripcion, $com_id, $hor_estado) {
-        $hor_descripcion = mysqli_real_escape_string($this->getConnect(), $hor_descripcion);
-        $com_id = (int)$com_id;
-        $hor_estado = (int)$hor_estado;
-
-        $sql = "INSERT INTO horno (hor_descripcion, com_id, hor_estado) VALUES ('$hor_descripcion', $com_id, $hor_estado)";
-        return $this->execute($sql);
+    public function updateRecord(int $hor_id, string $hor_descripcion, int $com_id, int $hor_estado): bool
+    {
+        return $this->executeStatement(
+            'UPDATE horno SET hor_descripcion = ?, com_id = ?, hor_estado = ? WHERE hor_id = ?',
+            'siii',
+            [trim($hor_descripcion), $com_id, $hor_estado, $hor_id]
+        );
     }
 
-    public function updateRecord($hor_id, $hor_descripcion, $com_id, $hor_estado) {
-        $hor_id = (int)$hor_id;
-        $hor_descripcion = mysqli_real_escape_string($this->getConnect(), $hor_descripcion);
-        $com_id = (int)$com_id;
-        $hor_estado = (int)$hor_estado;
-
-        $sql = "UPDATE horno SET hor_descripcion = '$hor_descripcion', com_id = $com_id, hor_estado = $hor_estado WHERE hor_id = $hor_id";
-        return $this->execute($sql);
-    }
-
-    public function deleteRecord($hor_id) {
-        $hor_id = (int)$hor_id;
-        $sql = "DELETE FROM horno WHERE hor_id = $hor_id";
-        return $this->execute($sql);
+    public function deleteRecord(int $hor_id): bool
+    {
+        return $this->executeStatement('DELETE FROM horno WHERE hor_id = ?', 'i', [$hor_id]);
     }
 }

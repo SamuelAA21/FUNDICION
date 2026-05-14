@@ -1,8 +1,8 @@
 <?php
-$URL_TM_POSTNEW = getUrl("TipoMetal", "TipoMetal", "postNew", false, true);
-$URL_TM_UPDATE  = getUrl("TipoMetal", "TipoMetal", "update", false, true);
-$URL_TM_ONE     = getUrl("TipoMetal", "TipoMetal", "one", false, true);
-$URL_TM_DELETE  = getUrl("TipoMetal", "TipoMetal", "delete", false, true);
+$URL_TM_POSTNEW = getUrl('TipoMetal', 'TipoMetal', 'postNew', false, true);
+$URL_TM_UPDATE = getUrl('TipoMetal', 'TipoMetal', 'update', false, true);
+$URL_TM_ONE = getUrl('TipoMetal', 'TipoMetal', 'one', false, true);
+$URL_TM_DELETE = getUrl('TipoMetal', 'TipoMetal', 'delete', false, true);
 ?>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -32,7 +32,9 @@ $URL_TM_DELETE  = getUrl("TipoMetal", "TipoMetal", "delete", false, true);
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTipoMetalTitle">Tipo Metal</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="frmTipoMetal">
@@ -51,7 +53,7 @@ $URL_TM_DELETE  = getUrl("TipoMetal", "TipoMetal", "delete", false, true);
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" onclick="tipoMetalGuardar()">Guardar</button>
             </div>
         </div>
@@ -59,8 +61,8 @@ $URL_TM_DELETE  = getUrl("TipoMetal", "TipoMetal", "delete", false, true);
 </div>
 
 <script>
-const URL_TM_POSTNEW = "<?= $URL_TM_POSTNEW ?>";
-const URL_TM_UPDATE  = "<?= $URL_TM_UPDATE ?>";
-const URL_TM_ONE     = "<?= $URL_TM_ONE ?>";
-const URL_TM_DELETE  = "<?= $URL_TM_DELETE ?>";
+const URL_TM_POSTNEW = "<?= htmlspecialchars($URL_TM_POSTNEW, ENT_QUOTES, 'UTF-8') ?>";
+const URL_TM_UPDATE  = "<?= htmlspecialchars($URL_TM_UPDATE, ENT_QUOTES, 'UTF-8') ?>";
+const URL_TM_ONE     = "<?= htmlspecialchars($URL_TM_ONE, ENT_QUOTES, 'UTF-8') ?>";
+const URL_TM_DELETE  = "<?= htmlspecialchars($URL_TM_DELETE, ENT_QUOTES, 'UTF-8') ?>";
 </script>
