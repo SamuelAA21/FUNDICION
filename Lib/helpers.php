@@ -1,120 +1,109 @@
 <?php
 
-date_default_timezone_set('America/Bogota');
-
+date_default_timezone_set("America/Bogota");
 function redirect($url)
 {
-    header('Location: ' . $url);
-    exit;
+	echo "<script type='text/javascript'>"
+		.	   "window.location.href='$url'"
+		. "</script>";
 }
 
 function dd($var)
 {
-    echo '<pre>';
-    die(print_r($var, true));
+	echo '<pre>';
+	die(print_r($var));
 }
 
-function getUrl($modulo, $controlador, $funcion, $parametros = false, $ajax = false)
-{
-    $pagina = $ajax ? 'ajax' : 'index';
-    $query = [
-        'module' => $modulo,
-        'controller' => $controlador,
-        'function' => $funcion
-    ];
-
-    if ($parametros) {
-        foreach ($parametros as $indice => $valor) {
-            $query[$indice] = $valor;
+function getUrl($modulo,$controlador,$funcion,$parametros=false,$ajax=false){
+   
+    if($ajax){
+        $pagina="ajax";
+    }
+    else{
+        $pagina="index";
+    }
+   
+    $url="$pagina.php?module=$modulo&controller=$controlador&function=$funcion";
+   
+    if($parametros){
+        foreach($parametros as $indice=>$valor){
+            $url.="&$indice=$valor";
         }
     }
-
-    return $pagina . '.php?' . http_build_query($query);
+   
+    return $url;
 }
+ 
 
-function resolve($module = false, $controller = false, $function = false)
-{
-    if ($module === false) {
-        $module = preg_replace('/[^A-Za-z0-9_]/', '', $_GET['module'] ?? '');
-        $controller = preg_replace('/[^A-Za-z0-9_]/', '', $_GET['controller'] ?? '');
-        $function = preg_replace('/[^A-Za-z0-9_]/', '', $_GET['function'] ?? '');
-    }
+function resolve($module = FALSE, $controller = FALSE, $function = FALSE)
+{	
+	if ($module == FALSE) {
+		$module = ($_GET['module']);
+		$controller = ($_GET['controller']);
+		$function = $_GET['function'];
+	}
 
-    if ($module === '' || $controller === '' || $function === '') {
-        echo 'Solicitud invalida';
-        return;
-    }
-
-    $controllerDir = '../Controller/' . $module;
-    $controllerFile = $controllerDir . '/Ctrl' . $controller . '.php';
-
-    if (!is_dir($controllerDir)) {
-        echo 'No existe carpeta';
-        return;
-    }
-
-    if (!file_exists($controllerFile)) {
-        echo 'No existe controller';
-        return;
-    }
-
-    include_once $controllerFile;
-    $nombreClase = 'Ctrl' . $controller;
-
-    if (!class_exists($nombreClase)) {
-        echo 'No existe clase';
-        return;
-    }
-
-    $objClase = new $nombreClase();
-    if (!method_exists($objClase, $function)) {
-        echo 'No existe function';
-        return;
-    }
-
-    $objClase->$function();
+	
+	if (is_dir('../Controller/' . $module)) {
+		if (file_exists('../Controller/' . $module . '/Ctrl' . $controller . '.php')) {
+			include_once '../Controller/' . $module . '/Ctrl' . $controller . '.php';
+			$nombreClase = 'Ctrl' . $controller;
+			$objClase = new $nombreClase();
+			if (method_exists($objClase, $function)) {
+				$objClase->$function();
+			} else {
+				echo"No existe function";
+				//redirect(getUrl('Page', 'Page', 'getError404'));
+			}
+		} else {
+			echo"No existe controller";
+			//redirect(getUrl('Page', 'Page', 'getError404'));
+		}
+	} else {
+		echo"No existe carpeta";
+		//redirect(getUrl('Page', 'Page', 'getError404'));
+	}	
 }
 
 function fechaActual()
 {
-    $fechaActual = getdate();
-    ($fechaActual['seconds'] < 10) ? $fechaActual['seconds'] = '0' . $fechaActual['seconds'] : '';
-    ($fechaActual['minutes'] < 10) ? $fechaActual['minutes'] = '0' . $fechaActual['minutes'] : '';
-    return $fechaActual['mday'] . ' ' . monthToString($fechaActual['mon'] - 1) . ' '
-        . $fechaActual['year'] . ' a las ' . $fechaActual['hours'] . ':'
-        . $fechaActual['minutes'] . ':' . $fechaActual['seconds'];
+	date_default_timezone_set("America/Bogota");
+	$fechaActual = getdate();
+	($fechaActual['seconds'] < 10) ? $fechaActual['seconds'] = '0' . $fechaActual['seconds'] : '';
+	($fechaActual['minutes'] < 10) ? $fechaActual['minutes'] = '0' . $fechaActual['minutes'] : '';
+	$fechaActual = $fechaActual['mday'] . " " . monthToString($fechaActual['mon'] - 1) . " " .
+		$fechaActual['year'] . " a las " . $fechaActual['hours'] . ":" .
+		$fechaActual['minutes'] . ":"  . $fechaActual['seconds'];
+	return $fechaActual;
 }
 
 function fechaCastellano($fecha)
 {
-    $fecha = substr($fecha, 0, 10);
-    $dia = date('d', strtotime($fecha));
-    $mes = date('F', strtotime($fecha));
-    $anio = date('Y', strtotime($fecha));
+	$fecha = substr($fecha, 0, 10);
+	$numeroDia = date('d', strtotime($fecha));
+	$dia = date('d', strtotime($fecha));
+	$mes = date('F', strtotime($fecha));
+	$anio = date('Y', strtotime($fecha));
 
-    $meses_ES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    $meses_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    $nombreMes = str_replace($meses_EN, $meses_ES, $mes);
-    return $dia . ' ' . $nombreMes . ' ' . $anio;
+
+	$meses_ES = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+	$meses_EN = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+	$nombreMes = str_replace($meses_EN, $meses_ES, $mes);
+	return $dia . " " . $nombreMes . " " . $anio;
 }
 
-function messageSweetAlert($title, $text, $type, $colorBtn, $url = null)
-{
-    $safeTitle = json_encode((string)$title, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    $safeText = json_encode((string)$text, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    $safeType = json_encode((string)$type, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    $safeUrl = json_encode((string)($url ?? ''), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-    echo "<script>
-        swal({
-            title: {$safeTitle},
-            text: {$safeText},
-            icon: {$safeType},
-            button: 'Aceptar'
-        }).then(function () {
-            if ({$safeUrl}) {
-                window.location.href = {$safeUrl};
-            }
-        });
-    </script>";
+function messageSweetAlert($title, $text, $type, $colorBtn, $url = null)
+{	
+		echo "<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script>
+			<script>
+				swal({
+					title: '".$title."',
+					text: '".$text."',
+					icon: '".$type."',
+					button: 'Aceptar'
+				}).then(() => {
+  					window.location.href = '".$url."'; 
+				});
+			</script>";	
 }

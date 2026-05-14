@@ -8,7 +8,7 @@
 <script src="js/datatables.min.js"></script>
 
 <!-- 4) SweetAlert -->
-<script src="js/sweet_alert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <!-- 5) Bootstrap (BS4) -->
 <script src="js/popper.min.js"></script>

@@ -1,27 +1,18 @@
 <?php
 include_once '../DAO/Bodega/BodegaDAO.php';
 
-class CtrlBodega
-{
-    private $dao;
+class CtrlBodega extends BodegaDAO {
 
-    public function __construct()
-    {
-        $this->dao = new BodegaDAO();
-    }
-
-    public function read()
-    {
+    public function read() {
         include_once '../View/Bodega/viewBodega.php';
     }
 
-    public function data()
-    {
+    public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $rows = $this->dao->getAll();
+        $rs = $this->getAll();
         $array = ['data' => []];
 
-        foreach ($rows as $row) {
+        while ($row = mysqli_fetch_assoc($rs)) {
             $bod_id = (int)($row['bod_id'] ?? 0);
 
             $array['data'][] = [
@@ -38,8 +29,7 @@ class CtrlBodega
         echo json_encode($array);
     }
 
-    public function one()
-    {
+    public function one() {
         header('Content-Type: application/json; charset=utf-8');
         $bod_id = isset($_POST['bod_id']) ? (int)$_POST['bod_id'] : 0;
 
@@ -48,11 +38,12 @@ class CtrlBodega
             return;
         }
 
-        echo json_encode($this->dao->getById($bod_id) ?? []);
+        $rs = $this->getById($bod_id);
+        $row = mysqli_fetch_assoc($rs);
+        echo json_encode($row ?: []);
     }
 
-    public function postNew()
-    {
+    public function postNew() {
         header('Content-Type: application/json; charset=utf-8');
         $data = $this->collectData();
 
@@ -61,12 +52,11 @@ class CtrlBodega
             return;
         }
 
-        $this->dao->insertRecord($data['payload']);
+        $this->insertRecord($data['payload']);
         echo json_encode(['ok' => true, 'msg' => 'Bodega creada correctamente']);
     }
 
-    public function update()
-    {
+    public function update() {
         header('Content-Type: application/json; charset=utf-8');
         $bod_id = isset($_POST['bod_id']) ? (int)$_POST['bod_id'] : 0;
         $data = $this->collectData();
@@ -81,12 +71,11 @@ class CtrlBodega
             return;
         }
 
-        $this->dao->updateRecord($bod_id, $data['payload']);
+        $this->updateRecord($bod_id, $data['payload']);
         echo json_encode(['ok' => true, 'msg' => 'Bodega actualizada correctamente']);
     }
 
-    public function delete()
-    {
+    public function delete() {
         header('Content-Type: application/json; charset=utf-8');
         $bod_id = isset($_POST['bod_id']) ? (int)$_POST['bod_id'] : 0;
 
@@ -95,12 +84,11 @@ class CtrlBodega
             return;
         }
 
-        $this->dao->deleteRecord($bod_id);
+        $this->deleteRecord($bod_id);
         echo json_encode(['ok' => true, 'msg' => 'Bodega eliminada correctamente']);
     }
 
-    private function collectData(): array
-    {
+    private function collectData() {
         $payload = [
             'bod_id' => isset($_POST['bod_id']) ? (int)$_POST['bod_id'] : 0,
             'bod_descripcion' => trim($_POST['bod_descripcion'] ?? ''),

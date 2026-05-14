@@ -1,30 +1,21 @@
 <?php
 include_once '../DAO/Fundicion/FundicionDAO.php';
 
-class CtrlFundicion
-{
-    private $dao;
+class CtrlFundicion extends FundicionDAO {
 
-    public function __construct()
-    {
-        $this->dao = new FundicionDAO();
-    }
-
-    public function read()
-    {
-        $responsables = $this->dao->getResponsablesList();
-        $materiasPrimas = $this->dao->getMateriasPrimasList();
-        $clientes = $this->dao->getClientesList();
-        $productos = $this->dao->getProductosTerminadosList();
-        $hornos = $this->dao->getHornosList();
-        $nextNumero = $this->dao->getNextRegistroId();
+    public function read() {
+        $responsables = $this->getResponsablesList();
+        $materiasPrimas = $this->getMateriasPrimasList();
+        $clientes = $this->getClientesList();
+        $productos = $this->getProductosTerminadosList();
+        $hornos = $this->getHornosList();
+        $nextNumero = $this->getNextRegistroId();
         $mensaje = $_GET['msg'] ?? '';
 
         include_once '../View/Fundicion/viewFundicion.php';
     }
 
-    public function postNew()
-    {
+    public function postNew() {
         $rfun_fecha = trim($_POST['fun_fecha'] ?? '');
         $usu_responsable = trim($_POST['fun_responsable'] ?? '');
         $mat_codigo = isset($_POST['fun_mat_codigo']) ? (int)$_POST['fun_mat_codigo'] : 0;
@@ -74,7 +65,7 @@ class CtrlFundicion
             return;
         }
 
-        $com_id = $this->dao->getCombustibleIdByHorno($hor_id);
+        $com_id = $this->getCombustibleIdByHorno($hor_id);
         if ($com_id <= 0) {
             messageSweetAlert(
                 'Horno invalido',
@@ -90,47 +81,35 @@ class CtrlFundicion
             $rfun_observacion = trim($rfun_observacion . "\nResiduo: " . $residuo_texto);
         }
 
-        $rfun_id = $this->dao->getNextRegistroId();
-        $dfun_id = $this->dao->getNextDetalleId();
+        $rfun_id = $this->getNextRegistroId();
+        $dfun_id = $this->getNextDetalleId();
 
-        $ok = $this->dao->saveFundicion(
-            [
-                'rfun_id' => $rfun_id,
-                'rfun_fecha' => $rfun_fecha,
-                'usu_responsable' => $usu_responsable,
-                'rfun_observacion' => $rfun_observacion,
-                'usu_crea' => $usu_responsable
-            ],
-            [
-                'dfun_id' => $dfun_id,
-                'rfun_id' => $rfun_id,
-                'mat_codigo' => $mat_codigo,
-                'cli_mat' => $cli_mat,
-                'dfun_cantidad' => $dfun_cantidad,
-                'pro_id' => $pro_id,
-                'dfun_cantprot' => $dfun_cantprot,
-                'esc_id' => 0,
-                'dfun_cantesc' => $dfun_cantesc,
-                'hor_id' => $hor_id,
-                'com_id' => $com_id,
-                'dfun_cantidad_com' => $dfun_cantidad_com,
-                'dfun_hinicio' => $dfun_hinicio,
-                'dfun_hfin' => $dfun_hfin,
-                'dfun_per_metal' => $dfun_per_metal,
-                'dfun_num_docrres' => 0
-            ]
+        $this->insertRegistroFundicion(
+            $rfun_id,
+            $rfun_fecha,
+            $usu_responsable,
+            $rfun_observacion,
+            $usu_responsable
         );
 
-        if (!$ok) {
-            messageSweetAlert(
-                'Error al guardar',
-                'No fue posible registrar la fundicion.',
-                'error',
-                '#dc3545',
-                getUrl('Fundicion', 'Fundicion', 'read')
-            );
-            return;
-        }
+        $this->insertDetalleFundicion(
+            $dfun_id,
+            $rfun_id,
+            $mat_codigo,
+            $cli_mat,
+            $dfun_cantidad,
+            $pro_id,
+            $dfun_cantprot,
+            0,
+            $dfun_cantesc,
+            $hor_id,
+            $com_id,
+            $dfun_cantidad_com,
+            $dfun_hinicio,
+            $dfun_hfin,
+            $dfun_per_metal,
+            0
+        );
 
         redirect(getUrl('Fundicion', 'Fundicion', 'read', ['msg' => 'guardado']));
     }

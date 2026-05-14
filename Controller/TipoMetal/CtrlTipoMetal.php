@@ -1,85 +1,68 @@
 <?php
 include_once '../DAO/TipoMetal/TipoMetalDAO.php';
 
-class CtrlTipoMetal
-{
-    private $dao;
+class CtrlTipoMetal extends TipoMetalDAO {
 
-    public function __construct()
-    {
-        $this->dao = new TipoMetalDAO();
-    }
-
-    public function read()
-    {
+    public function read() {
         include_once '../View/TipoMetal/viewTipoMetal.php';
     }
 
-    public function data()
-    {
+    public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $rows = $this->dao->getAll();
+        $rs = $this->getAll();
         $array = ['data' => []];
 
-        foreach ($rows as $row) {
+        while ($row = mysqli_fetch_assoc($rs)) {
             $array['data'][] = [
-                'tmetal_id' => (int)($row['tmetal_id'] ?? 0),
-                'tmetal_descripcion' => $row['tmetal_descripcion'] ?? '',
-                'tmetal_estado' => ((string)($row['tmetal_estado'] ?? '0') === '1') ? 'Activo' : 'Inactivo'
+                'tmetal_id' => $row['tmetal_id'],
+                'tmetal_descripcion' => $row['tmetal_descripcion'],
+                'tmetal_estado' => ($row['tmetal_estado'] == 1) ? "Activo" : "Inactivo"
             ];
         }
 
         echo json_encode($array);
     }
 
-    public function one()
-    {
+    public function one() {
         header('Content-Type: application/json; charset=utf-8');
         $tmetal_id = isset($_POST['tmetal_id']) ? (int)$_POST['tmetal_id'] : 0;
-
-        if ($tmetal_id <= 0) {
-            echo json_encode(['ok' => false, 'msg' => 'ID invalido']);
-            return;
-        }
-
-        echo json_encode($this->dao->getById($tmetal_id) ?? []);
+        $rs = $this->getById($tmetal_id);
+        $row = mysqli_fetch_assoc($rs);
+        echo json_encode($row ?: []);
     }
 
-    public function postNew()
-    {
+    public function postNew() {
         header('Content-Type: application/json; charset=utf-8');
 
         $tmetal_descripcion = trim($_POST['tmetal_descripcion'] ?? '');
-        $tmetal_estado = isset($_POST['tmetal_estado']) ? (int)$_POST['tmetal_estado'] : 1;
+        $tmetal_estado = trim($_POST['tmetal_estado'] ?? '1');
 
-        if ($tmetal_descripcion === '') {
+        if ($tmetal_descripcion === '' || $tmetal_estado === '') {
             echo json_encode(['ok' => false, 'msg' => 'Complete los campos obligatorios']);
             return;
         }
 
-        $this->dao->insertRecord($tmetal_descripcion, $tmetal_estado);
+        $this->insertRecord($tmetal_descripcion, $tmetal_estado);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal creado correctamente']);
     }
 
-    public function update()
-    {
+    public function update() {
         header('Content-Type: application/json; charset=utf-8');
 
         $tmetal_id = isset($_POST['tmetal_id']) ? (int)$_POST['tmetal_id'] : 0;
         $tmetal_descripcion = trim($_POST['tmetal_descripcion'] ?? '');
-        $tmetal_estado = isset($_POST['tmetal_estado']) ? (int)$_POST['tmetal_estado'] : 1;
+        $tmetal_estado = trim($_POST['tmetal_estado'] ?? '1');
 
-        if ($tmetal_id <= 0 || $tmetal_descripcion === '') {
+        if ($tmetal_id <= 0 || $tmetal_descripcion === '' || $tmetal_estado === '') {
             echo json_encode(['ok' => false, 'msg' => 'Complete los campos obligatorios']);
             return;
         }
 
-        $this->dao->updateRecord($tmetal_id, $tmetal_descripcion, $tmetal_estado);
+        $this->updateRecord($tmetal_id, $tmetal_descripcion, $tmetal_estado);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal actualizado correctamente']);
     }
 
-    public function delete()
-    {
+    public function delete() {
         header('Content-Type: application/json; charset=utf-8');
         $tmetal_id = isset($_POST['tmetal_id']) ? (int)$_POST['tmetal_id'] : 0;
 
@@ -88,7 +71,7 @@ class CtrlTipoMetal
             return;
         }
 
-        $this->dao->deleteRecord($tmetal_id);
+        $this->deleteRecord($tmetal_id);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal eliminado correctamente']);
     }
 }

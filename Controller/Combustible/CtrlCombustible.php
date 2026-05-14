@@ -1,27 +1,18 @@
 <?php
 include_once '../DAO/Combustible/CombustibleDAO.php';
 
-class CtrlCombustible
-{
-    private $dao;
+class CtrlCombustible extends CombustibleDAO {
 
-    public function __construct()
-    {
-        $this->dao = new CombustibleDAO();
-    }
-
-    public function read()
-    {
+    public function read() {
         include_once '../View/Combustible/viewCombustible.php';
     }
 
-    public function data()
-    {
+    public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $rows = $this->dao->getAll();
+        $rs = $this->getAll();
         $array = ['data' => []];
 
-        foreach ($rows as $row) {
+        while ($row = mysqli_fetch_assoc($rs)) {
             $comb_id = (int)($row['com_id'] ?? 0);
             $estadoRaw = trim((string)($row['com_estado'] ?? '0'));
             $estado = ($estadoRaw === '1' || strcasecmp($estadoRaw, 'activo') === 0) ? 'Activo' : 'Inactivo';
@@ -38,8 +29,7 @@ class CtrlCombustible
         echo json_encode($array);
     }
 
-    public function one()
-    {
+    public function one() {
         header('Content-Type: application/json; charset=utf-8');
         $comb_id = isset($_POST['comb_id']) ? (int)$_POST['comb_id'] : 0;
 
@@ -48,11 +38,12 @@ class CtrlCombustible
             return;
         }
 
-        echo json_encode($this->dao->getById($comb_id) ?? []);
+        $rs = $this->getById($comb_id);
+        $row = mysqli_fetch_assoc($rs);
+        echo json_encode($row ?: []);
     }
 
-    public function postNew()
-    {
+    public function postNew() {
         header('Content-Type: application/json; charset=utf-8');
         $comb_descripcion = trim($_POST['comb_descripcion'] ?? '');
         $comb_estado = isset($_POST['comb_estado']) ? (int)$_POST['comb_estado'] : 1;
@@ -62,12 +53,11 @@ class CtrlCombustible
             return;
         }
 
-        $this->dao->insertRecord($comb_descripcion, $comb_estado);
+        $this->insertRecord($comb_descripcion, $comb_estado);
         echo json_encode(['ok' => true, 'msg' => 'Combustible creado correctamente']);
     }
 
-    public function update()
-    {
+    public function update() {
         header('Content-Type: application/json; charset=utf-8');
         $comb_id = isset($_POST['comb_id']) ? (int)$_POST['comb_id'] : 0;
         $comb_descripcion = trim($_POST['comb_descripcion'] ?? '');
@@ -78,12 +68,11 @@ class CtrlCombustible
             return;
         }
 
-        $this->dao->updateRecord($comb_id, $comb_descripcion, $comb_estado);
+        $this->updateRecord($comb_id, $comb_descripcion, $comb_estado);
         echo json_encode(['ok' => true, 'msg' => 'Combustible actualizado correctamente']);
     }
 
-    public function delete()
-    {
+    public function delete() {
         header('Content-Type: application/json; charset=utf-8');
         $comb_id = isset($_POST['comb_id']) ? (int)$_POST['comb_id'] : 0;
 
@@ -92,7 +81,7 @@ class CtrlCombustible
             return;
         }
 
-        $this->dao->deleteRecord($comb_id);
+        $this->deleteRecord($comb_id);
         echo json_encode(['ok' => true, 'msg' => 'Combustible eliminado correctamente']);
     }
 }

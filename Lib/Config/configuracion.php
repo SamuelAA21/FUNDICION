@@ -16,9 +16,11 @@ if (!defined('DB_DATABASE')) {
     define('DB_DATABASE', 'bd_fundicion');
 }
 
-// Variables compatibles con la implementacion anterior.
+// Variables compatibles con implementación anterior
 $servidor = DB_HOST;
 $usuario = DB_USER;
 $clave = DB_PASSWORD;
 $puerto = DB_PORT;
 $baseDatos = DB_DATABASE;
+
+?>

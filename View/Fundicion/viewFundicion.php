@@ -1,5 +1,5 @@
 <?php
-$URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
+$URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
 ?>
 
 <div class="container mt-4 mb-5">
@@ -31,7 +31,7 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
                         <label for="fun_responsable">Responsable Fundicion:</label>
                         <select id="fun_responsable" name="fun_responsable" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <?php foreach ($responsables as $row) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($responsables)) { ?>
                                 <?php $nombreCompleto = trim(($row['usu_nombres'] ?? '') . ' ' . ($row['usu_apellidos'] ?? '')); ?>
                                 <option value="<?= htmlspecialchars($row['usu_login'], ENT_QUOTES, 'UTF-8') ?>">
                                     <?= htmlspecialchars($nombreCompleto !== '' ? $nombreCompleto : $row['usu_login'], ENT_QUOTES, 'UTF-8') ?>
@@ -49,7 +49,7 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
                         <input type="text" id="fun_materia_prima" name="fun_materia_prima" class="form-control" list="listMateriasPrimas" autocomplete="off" required>
                         <input type="hidden" id="fun_mat_codigo" name="fun_mat_codigo">
                         <datalist id="listMateriasPrimas">
-                            <?php foreach ($materiasPrimas as $row) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($materiasPrimas)) { ?>
                                 <option data-id="<?= (int)$row['mat_codigo'] ?>" value="<?= htmlspecialchars($row['mat_descripcion'], ENT_QUOTES, 'UTF-8') ?>"></option>
                             <?php } ?>
                         </datalist>
@@ -65,7 +65,7 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
                         <input type="text" id="fun_cliente" name="fun_cliente" class="form-control" list="listClientes" autocomplete="off" required>
                         <input type="hidden" id="fun_cliente_id" name="fun_cliente_id">
                         <datalist id="listClientes">
-                            <?php foreach ($clientes as $row) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($clientes)) { ?>
                                 <option data-id="<?= htmlspecialchars($row['cli_nit'], ENT_QUOTES, 'UTF-8') ?>" value="<?= htmlspecialchars($row['cli_razon_social'], ENT_QUOTES, 'UTF-8') ?>"></option>
                             <?php } ?>
                         </datalist>
@@ -80,7 +80,7 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
                         <input type="text" id="fun_producto_terminado" name="fun_producto_terminado" class="form-control" list="listProductos" autocomplete="off" required>
                         <input type="hidden" id="fun_producto_id" name="fun_producto_id">
                         <datalist id="listProductos">
-                            <?php foreach ($productos as $row) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($productos)) { ?>
                                 <option data-id="<?= (int)$row['pro_id'] ?>" value="<?= htmlspecialchars($row['pro_nombre'], ENT_QUOTES, 'UTF-8') ?>"></option>
                             <?php } ?>
                         </datalist>
@@ -117,7 +117,7 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
                         <label for="fun_horno">Horno</label>
                         <select id="fun_horno" name="fun_horno" class="form-control" required>
                             <option value="">Seleccione</option>
-                            <?php foreach ($hornos as $row) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($hornos)) { ?>
                                 <option
                                     value="<?= (int)$row['hor_id'] ?>"
                                     data-combustible-id="<?= (int)($row['com_id'] ?? 0) ?>"
@@ -142,12 +142,12 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
                         <label for="fun_hora_inicio">Hora Inicio</label>
                         <select id="fun_hora_inicio" name="fun_hora_inicio" class="form-control">
                             <option value="">Hora Inicio</option>
-                            <?php for ($hora = 0; $hora < 24; $hora++) { ?>
-                                <?php for ($min = 0; $min < 60; $min += 30) { ?>
-                                    <?php $time = str_pad((string)$hora, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string)$min, 2, '0', STR_PAD_LEFT); ?>
+                            <?php for ($hora = 0; $hora < 24; $hora++) {
+                                for ($min = 0; $min < 60; $min += 30) {
+                                    $time = str_pad((string)$hora, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string)$min, 2, '0', STR_PAD_LEFT); ?>
                                     <option value="<?= $time ?>"><?= $time ?></option>
-                                <?php } ?>
-                            <?php } ?>
+                            <?php }
+                            } ?>
                         </select>
                     </div>
 
@@ -155,12 +155,12 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
                         <label for="fun_hora_fin">Hora Fin</label>
                         <select id="fun_hora_fin" name="fun_hora_fin" class="form-control">
                             <option value="">Hora Fin</option>
-                            <?php for ($hora = 0; $hora < 24; $hora++) { ?>
-                                <?php for ($min = 0; $min < 60; $min += 30) { ?>
-                                    <?php $time = str_pad((string)$hora, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string)$min, 2, '0', STR_PAD_LEFT); ?>
+                            <?php for ($hora = 0; $hora < 24; $hora++) {
+                                for ($min = 0; $min < 60; $min += 30) {
+                                    $time = str_pad((string)$hora, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string)$min, 2, '0', STR_PAD_LEFT); ?>
                                     <option value="<?= $time ?>"><?= $time ?></option>
-                                <?php } ?>
-                            <?php } ?>
+                            <?php }
+                            } ?>
                         </select>
                     </div>
                 </div>
@@ -181,3 +181,149 @@ $URL_FUNDICION_POSTNEW = getUrl('Fundicion', 'Fundicion', 'postNew');
         </form>
     </div>
 </div>
+
+<style>
+.page-main .container {
+    max-width: 1160px;
+}
+
+.fundicion-card {
+    background: #fff;
+    border: 1px solid #ddd7ce;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+}
+
+.fundicion-header {
+    border-bottom: 1px solid #e1ddd7;
+    padding: 14px 18px;
+    text-align: center;
+}
+
+.fundicion-header h3 {
+    color: #5d544c;
+    font-weight: 700;
+}
+
+.fundicion-body {
+    padding: 18px;
+}
+
+.fundicion-row-top {
+    display: grid;
+    grid-template-columns: 190px 190px minmax(260px, 1fr);
+    gap: 14px;
+    align-items: end;
+}
+
+.fundicion-grid {
+    display: grid;
+    gap: 22px;
+    margin-top: 18px;
+}
+
+.fundicion-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.fundicion-grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.fundicion-grid-loss {
+    grid-template-columns: 1fr 190px;
+    align-items: end;
+}
+
+.fundicion-grid-5 {
+    grid-template-columns: 160px 1fr 1fr 180px 180px;
+    align-items: end;
+}
+
+.fundicion-band {
+    background: #b6b6b6;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    font-size: 22px;
+    padding: 10px 14px;
+    margin-top: 18px;
+}
+
+.fundicion-band-small {
+    width: 64%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 28px;
+}
+
+.fundicion-separator {
+    border-top: 1px solid #e6e6e6;
+    margin-top: 20px;
+}
+
+.fundicion-field label {
+    display: block;
+    margin-bottom: 10px;
+    color: #5d544c;
+    font-weight: 600;
+}
+
+.fundicion-field .form-control {
+    min-height: 44px;
+    border: 1px solid #b7b7b7;
+    border-radius: 2px;
+    box-shadow: none;
+}
+
+.fundicion-observaciones {
+    margin-top: 28px;
+}
+
+.fundicion-observaciones-box {
+    width: min(540px, 100%);
+}
+
+.fundicion-observaciones textarea.form-control {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.fundicion-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.fundicion-actions .btn {
+    min-width: 96px;
+}
+
+@media (max-width: 991px) {
+    .fundicion-row-top,
+    .fundicion-grid-3,
+    .fundicion-grid-4,
+    .fundicion-grid-loss,
+    .fundicion-grid-5 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .fundicion-band-small {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    .fundicion-body {
+        padding: 14px;
+    }
+
+    .fundicion-row-top,
+    .fundicion-grid-3,
+    .fundicion-grid-4,
+    .fundicion-grid-loss,
+    .fundicion-grid-5 {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

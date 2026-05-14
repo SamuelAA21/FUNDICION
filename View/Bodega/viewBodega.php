@@ -74,8 +74,8 @@ $URL_BOD_DELETE  = getUrl("Bodega", "Bodega", "delete", false, true);
 </div>
 
 <script>
-const URL_BOD_POSTNEW = "<?= htmlspecialchars($URL_BOD_POSTNEW, ENT_QUOTES, 'UTF-8') ?>";
-const URL_BOD_UPDATE  = "<?= htmlspecialchars($URL_BOD_UPDATE, ENT_QUOTES, 'UTF-8') ?>";
-const URL_BOD_ONE     = "<?= htmlspecialchars($URL_BOD_ONE, ENT_QUOTES, 'UTF-8') ?>";
-const URL_BOD_DELETE  = "<?= htmlspecialchars($URL_BOD_DELETE, ENT_QUOTES, 'UTF-8') ?>";
+const URL_BOD_POSTNEW = "<?= $URL_BOD_POSTNEW ?>";
+const URL_BOD_UPDATE  = "<?= $URL_BOD_UPDATE ?>";
+const URL_BOD_ONE     = "<?= $URL_BOD_ONE ?>";
+const URL_BOD_DELETE  = "<?= $URL_BOD_DELETE ?>";
 </script>
