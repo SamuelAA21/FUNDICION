@@ -1,37 +1,74 @@
-document.addEventListener('DOMContentLoaded', function () {
+$(document).ready(function () {
     var form = document.getElementById('frmFundicion');
     var btnLimpiar = document.getElementById('btnLimpiarFundicion');
     var inputFecha = document.getElementById('fun_fecha');
     var inputNumero = document.getElementById('fun_numero');
     var selectHorno = document.getElementById('fun_horno');
     var inputCombustibleTipo = document.getElementById('fun_combustible_tipo');
+    var tablaFundicionReporte = null;
 
-    function fechaActualISO() {
-        return new Date().toISOString().split('T')[0];
-    }
-
-    function syncDatalistInput(inputId, listId, hiddenId) {
-        var input = document.getElementById(inputId);
-        var list = document.getElementById(listId);
-        var hidden = document.getElementById(hiddenId);
-
-        if (!input || !list || !hidden) {
+    function inicializarReporte() {
+        if (typeof $ === 'undefined' || !$.fn.DataTable || !$('#tblFundicionReporte').length || typeof URL_FUNDICION_DATA === 'undefined') {
             return;
         }
 
-        function resolveValue() {
-            var value = input.value.trim().toLowerCase();
-            hidden.value = '';
+        tablaFundicionReporte = $('#tblFundicionReporte').DataTable({
+            destroy: true,
+            responsive: true,
+            searching: true,
+            ordering: false,
+            pageLength: 10,
+            autoWidth: false,
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copy', text: 'Copiar' },
+                { extend: 'excel', text: 'Excel', title: 'Reporte_Fundicion' },
+                { extend: 'pdf', text: 'PDF', title: 'Reporte_Fundicion' },
+                { extend: 'print', text: 'Imprimir', title: 'Reporte de Fundicion' }
+            ],
+            ajax: {
+                url: URL_FUNDICION_DATA + '&t=' + Date.now(),
+                method: 'GET',
+                dataSrc: 'data'
+            },
+            columns: [
+                { data: 'rfun_id', defaultContent: '' },
+                { data: 'rfun_fecha', defaultContent: '' },
+                { data: 'responsable', defaultContent: '' },
+                { data: 'mat_descripcion', defaultContent: '' },
+                { data: 'dfun_cantidad', defaultContent: '' },
+                { data: 'cli_razon_social', defaultContent: '' },
+                { data: 'pro_nombre', defaultContent: '' },
+                { data: 'dfun_cantprot', defaultContent: '' },
+                { data: 'dfun_cantesc', defaultContent: '' },
+                { data: 'hor_descripcion', defaultContent: '' },
+                { data: 'com_descripcion', defaultContent: '' },
+                { data: 'dfun_cantidad_com', defaultContent: '' },
+                { data: 'horario', defaultContent: '' },
+                { data: 'dfun_per_metal', defaultContent: '' },
+                { data: 'rfun_observacion', defaultContent: '' }
+            ]
+        });
 
-            Array.prototype.forEach.call(list.options, function (option) {
-                if (option.value.trim().toLowerCase() === value) {
-                    hidden.value = option.dataset.id || '';
-                }
-            });
-        }
+        $('#btnFundicionCopiar').off('click').on('click', function () {
+            tablaFundicionReporte.button('.buttons-copy').trigger();
+        });
 
-        input.addEventListener('input', resolveValue);
-        input.addEventListener('change', resolveValue);
+        $('#btnFundicionExcel').off('click').on('click', function () {
+            tablaFundicionReporte.button('.buttons-excel').trigger();
+        });
+
+        $('#btnFundicionPdf').off('click').on('click', function () {
+            tablaFundicionReporte.button('.buttons-pdf').trigger();
+        });
+
+        $('#btnFundicionImprimir').off('click').on('click', function () {
+            tablaFundicionReporte.button('.buttons-print').trigger();
+        });
+    }
+
+    function fechaActualISO() {
+        return new Date().toISOString().split('T')[0];
     }
 
     function syncCombustible() {
@@ -47,9 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         inputFecha.value = fechaActualISO();
     }
 
-    syncDatalistInput('fun_materia_prima', 'listMateriasPrimas', 'fun_mat_codigo');
-    syncDatalistInput('fun_cliente', 'listClientes', 'fun_cliente_id');
-    syncDatalistInput('fun_producto_terminado', 'listProductos', 'fun_producto_id');
+    inicializarReporte();
 
     if (selectHorno) {
         selectHorno.addEventListener('change', syncCombustible);

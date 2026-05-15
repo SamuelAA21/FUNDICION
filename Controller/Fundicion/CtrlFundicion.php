@@ -1,18 +1,54 @@
 <?php
 include_once '../DAO/Fundicion/FundicionDAO.php';
 
-class CtrlFundicion extends FundicionDAO {
+class CtrlFundicion {
+
+    private $fundicionDAO;
+
+    public function __construct() {
+        $this->fundicionDAO = new FundicionDAO();
+    }
 
     public function read() {
-        $responsables = $this->getResponsablesList();
-        $materiasPrimas = $this->getMateriasPrimasList();
-        $clientes = $this->getClientesList();
-        $productos = $this->getProductosTerminadosList();
-        $hornos = $this->getHornosList();
-        $nextNumero = $this->getNextRegistroId();
+        $responsables = $this->mapResponsables($this->fetchAll($this->fundicionDAO->getResponsablesList()));
+        $materiasPrimas = $this->mapMateriasPrimas($this->fetchAll($this->fundicionDAO->getMateriasPrimasList()));
+        $clientes = $this->mapClientes($this->fetchAll($this->fundicionDAO->getClientesList()));
+        $productos = $this->mapProductos($this->fetchAll($this->fundicionDAO->getProductosTerminadosList()));
+        $hornos = $this->mapHornos($this->fetchAll($this->fundicionDAO->getHornosList()));
+        $nextNumero = $this->fundicionDAO->getNextRegistroId();
         $mensaje = $_GET['msg'] ?? '';
 
         include_once '../View/Fundicion/viewFundicion.php';
+    }
+
+    public function data() {
+        header('Content-Type: application/json; charset=utf-8');
+        $rs = $this->fundicionDAO->getReportList();
+        $array = ['data' => []];
+
+        while ($row = mysqli_fetch_assoc($rs)) {
+            $responsable = trim((string)($row['responsable_nombre'] ?? ''));
+
+            $array['data'][] = [
+                'rfun_id' => (int)($row['rfun_id'] ?? 0),
+                'rfun_fecha' => $row['rfun_fecha'] ?? '',
+                'responsable' => $responsable !== '' ? $responsable : ($row['usu_responsable'] ?? ''),
+                'mat_descripcion' => $row['mat_descripcion'] ?? '',
+                'dfun_cantidad' => (float)($row['dfun_cantidad'] ?? 0),
+                'cli_razon_social' => $row['cli_razon_social'] ?? '',
+                'pro_nombre' => $row['pro_nombre'] ?? '',
+                'dfun_cantprot' => (float)($row['dfun_cantprot'] ?? 0),
+                'dfun_cantesc' => (float)($row['dfun_cantesc'] ?? 0),
+                'hor_descripcion' => $row['hor_descripcion'] ?? '',
+                'com_descripcion' => $row['com_descripcion'] ?? '',
+                'dfun_cantidad_com' => (float)($row['dfun_cantidad_com'] ?? 0),
+                'horario' => trim((string)($row['dfun_hinicio'] ?? '')) . (($row['dfun_hinicio'] ?? '') !== '' || ($row['dfun_hfin'] ?? '') !== '' ? ' - ' : '') . trim((string)($row['dfun_hfin'] ?? '')),
+                'dfun_per_metal' => (int)($row['dfun_per_metal'] ?? 0),
+                'rfun_observacion' => $row['rfun_observacion'] ?? ''
+            ];
+        }
+
+        echo json_encode($array);
     }
 
     public function postNew() {
@@ -65,7 +101,7 @@ class CtrlFundicion extends FundicionDAO {
             return;
         }
 
-        $com_id = $this->getCombustibleIdByHorno($hor_id);
+        $com_id = $this->fundicionDAO->getCombustibleIdByHorno($hor_id);
         if ($com_id <= 0) {
             messageSweetAlert(
                 'Horno invalido',
@@ -81,10 +117,10 @@ class CtrlFundicion extends FundicionDAO {
             $rfun_observacion = trim($rfun_observacion . "\nResiduo: " . $residuo_texto);
         }
 
-        $rfun_id = $this->getNextRegistroId();
-        $dfun_id = $this->getNextDetalleId();
+        $rfun_id = $this->fundicionDAO->getNextRegistroId();
+        $dfun_id = $this->fundicionDAO->getNextDetalleId();
 
-        $this->insertRegistroFundicion(
+        $this->fundicionDAO->insertRegistroFundicion(
             $rfun_id,
             $rfun_fecha,
             $usu_responsable,
@@ -92,7 +128,7 @@ class CtrlFundicion extends FundicionDAO {
             $usu_responsable
         );
 
-        $this->insertDetalleFundicion(
+        $this->fundicionDAO->insertDetalleFundicion(
             $dfun_id,
             $rfun_id,
             $mat_codigo,
@@ -112,5 +148,83 @@ class CtrlFundicion extends FundicionDAO {
         );
 
         redirect(getUrl('Fundicion', 'Fundicion', 'read', ['msg' => 'guardado']));
+    }
+
+    private function fetchAll($rs) {
+        $rows = [];
+
+        while ($row = mysqli_fetch_assoc($rs)) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    private function mapResponsables($rows) {
+        $items = [];
+
+        foreach ($rows as $row) {
+            $nombreCompleto = trim(($row['usu_nombres'] ?? '') . ' ' . ($row['usu_apellidos'] ?? ''));
+            $items[] = [
+                'value' => $row['usu_login'] ?? '',
+                'label' => $nombreCompleto !== '' ? $nombreCompleto : ($row['usu_login'] ?? '')
+            ];
+        }
+
+        return $items;
+    }
+
+    private function mapMateriasPrimas($rows) {
+        $items = [];
+
+        foreach ($rows as $row) {
+            $items[] = [
+                'value' => (int)($row['mat_codigo'] ?? 0),
+                'label' => $row['mat_descripcion'] ?? ''
+            ];
+        }
+
+        return $items;
+    }
+
+    private function mapClientes($rows) {
+        $items = [];
+
+        foreach ($rows as $row) {
+            $items[] = [
+                'value' => $row['cli_nit'] ?? '',
+                'label' => $row['cli_razon_social'] ?? ''
+            ];
+        }
+
+        return $items;
+    }
+
+    private function mapProductos($rows) {
+        $items = [];
+
+        foreach ($rows as $row) {
+            $items[] = [
+                'value' => (int)($row['pro_id'] ?? 0),
+                'label' => $row['pro_nombre'] ?? ''
+            ];
+        }
+
+        return $items;
+    }
+
+    private function mapHornos($rows) {
+        $items = [];
+
+        foreach ($rows as $row) {
+            $items[] = [
+                'value' => (int)($row['hor_id'] ?? 0),
+                'label' => $row['hor_descripcion'] ?? '',
+                'combustible_id' => (int)($row['com_id'] ?? 0),
+                'combustible' => $row['com_descripcion'] ?? ''
+            ];
+        }
+
+        return $items;
     }
 }

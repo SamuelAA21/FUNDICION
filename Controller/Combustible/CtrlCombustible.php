@@ -1,7 +1,13 @@
 <?php
 include_once '../DAO/Combustible/CombustibleDAO.php';
 
-class CtrlCombustible extends CombustibleDAO {
+class CtrlCombustible {
+
+    private $combustibleDAO;
+
+    public function __construct() {
+        $this->combustibleDAO = CombustibleDAO::getInstance();
+    }
 
     public function read() {
         include_once '../View/Combustible/viewCombustible.php';
@@ -9,7 +15,7 @@ class CtrlCombustible extends CombustibleDAO {
 
     public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $rs = $this->getAll();
+        $rs = $this->combustibleDAO->getAll();
         $array = ['data' => []];
 
         while ($row = mysqli_fetch_assoc($rs)) {
@@ -38,7 +44,7 @@ class CtrlCombustible extends CombustibleDAO {
             return;
         }
 
-        $rs = $this->getById($comb_id);
+        $rs = $this->combustibleDAO->getById($comb_id);
         $row = mysqli_fetch_assoc($rs);
         echo json_encode($row ?: []);
     }
@@ -53,7 +59,7 @@ class CtrlCombustible extends CombustibleDAO {
             return;
         }
 
-        $this->insertRecord($comb_descripcion, $comb_estado);
+        $this->combustibleDAO->insertRecord($comb_descripcion, $comb_estado);
         echo json_encode(['ok' => true, 'msg' => 'Combustible creado correctamente']);
     }
 
@@ -68,7 +74,7 @@ class CtrlCombustible extends CombustibleDAO {
             return;
         }
 
-        $this->updateRecord($comb_id, $comb_descripcion, $comb_estado);
+        $this->combustibleDAO->updateRecord($comb_id, $comb_descripcion, $comb_estado);
         echo json_encode(['ok' => true, 'msg' => 'Combustible actualizado correctamente']);
     }
 
@@ -81,7 +87,7 @@ class CtrlCombustible extends CombustibleDAO {
             return;
         }
 
-        $this->deleteRecord($comb_id);
+        $this->combustibleDAO->deleteRecord($comb_id);
         echo json_encode(['ok' => true, 'msg' => 'Combustible eliminado correctamente']);
     }
 }

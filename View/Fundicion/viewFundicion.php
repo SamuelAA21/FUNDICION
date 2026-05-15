@@ -1,5 +1,6 @@
 <?php
 $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
+$URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
 ?>
 
 <div class="container mt-4 mb-5">
@@ -31,10 +32,9 @@ $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
                         <label for="fun_responsable">Responsable Fundicion:</label>
                         <select id="fun_responsable" name="fun_responsable" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <?php while ($row = mysqli_fetch_assoc($responsables)) { ?>
-                                <?php $nombreCompleto = trim(($row['usu_nombres'] ?? '') . ' ' . ($row['usu_apellidos'] ?? '')); ?>
-                                <option value="<?= htmlspecialchars($row['usu_login'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <?= htmlspecialchars($nombreCompleto !== '' ? $nombreCompleto : $row['usu_login'], ENT_QUOTES, 'UTF-8') ?>
+                            <?php foreach ($responsables as $responsable) { ?>
+                                <option value="<?= htmlspecialchars($responsable['value'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <?= htmlspecialchars($responsable['label'], ENT_QUOTES, 'UTF-8') ?>
                                 </option>
                             <?php } ?>
                         </select>
@@ -46,13 +46,14 @@ $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
                 <div class="fundicion-grid fundicion-grid-3">
                     <div class="fundicion-field">
                         <label for="fun_materia_prima">Materia Prima</label>
-                        <input type="text" id="fun_materia_prima" name="fun_materia_prima" class="form-control" list="listMateriasPrimas" autocomplete="off" required>
-                        <input type="hidden" id="fun_mat_codigo" name="fun_mat_codigo">
-                        <datalist id="listMateriasPrimas">
-                            <?php while ($row = mysqli_fetch_assoc($materiasPrimas)) { ?>
-                                <option data-id="<?= (int)$row['mat_codigo'] ?>" value="<?= htmlspecialchars($row['mat_descripcion'], ENT_QUOTES, 'UTF-8') ?>"></option>
+                        <select id="fun_mat_codigo" name="fun_mat_codigo" class="form-control" required>
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($materiasPrimas as $materiaPrima) { ?>
+                                <option value="<?= (int)$materiaPrima['value'] ?>">
+                                    <?= htmlspecialchars($materiaPrima['label'], ENT_QUOTES, 'UTF-8') ?>
+                                </option>
                             <?php } ?>
-                        </datalist>
+                        </select>
                     </div>
 
                     <div class="fundicion-field">
@@ -62,13 +63,14 @@ $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
 
                     <div class="fundicion-field">
                         <label for="fun_cliente">Cliente</label>
-                        <input type="text" id="fun_cliente" name="fun_cliente" class="form-control" list="listClientes" autocomplete="off" required>
-                        <input type="hidden" id="fun_cliente_id" name="fun_cliente_id">
-                        <datalist id="listClientes">
-                            <?php while ($row = mysqli_fetch_assoc($clientes)) { ?>
-                                <option data-id="<?= htmlspecialchars($row['cli_nit'], ENT_QUOTES, 'UTF-8') ?>" value="<?= htmlspecialchars($row['cli_razon_social'], ENT_QUOTES, 'UTF-8') ?>"></option>
+                        <select id="fun_cliente_id" name="fun_cliente_id" class="form-control" required>
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($clientes as $cliente) { ?>
+                                <option value="<?= htmlspecialchars($cliente['value'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <?= htmlspecialchars($cliente['label'], ENT_QUOTES, 'UTF-8') ?>
+                                </option>
                             <?php } ?>
-                        </datalist>
+                        </select>
                     </div>
                 </div>
 
@@ -77,13 +79,14 @@ $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
                 <div class="fundicion-grid fundicion-grid-4">
                     <div class="fundicion-field">
                         <label for="fun_producto_terminado">Producto Terminado</label>
-                        <input type="text" id="fun_producto_terminado" name="fun_producto_terminado" class="form-control" list="listProductos" autocomplete="off" required>
-                        <input type="hidden" id="fun_producto_id" name="fun_producto_id">
-                        <datalist id="listProductos">
-                            <?php while ($row = mysqli_fetch_assoc($productos)) { ?>
-                                <option data-id="<?= (int)$row['pro_id'] ?>" value="<?= htmlspecialchars($row['pro_nombre'], ENT_QUOTES, 'UTF-8') ?>"></option>
+                        <select id="fun_producto_id" name="fun_producto_id" class="form-control" required>
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($productos as $producto) { ?>
+                                <option value="<?= (int)$producto['value'] ?>">
+                                    <?= htmlspecialchars($producto['label'], ENT_QUOTES, 'UTF-8') ?>
+                                </option>
                             <?php } ?>
-                        </datalist>
+                        </select>
                     </div>
 
                     <div class="fundicion-field">
@@ -117,12 +120,12 @@ $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
                         <label for="fun_horno">Horno</label>
                         <select id="fun_horno" name="fun_horno" class="form-control" required>
                             <option value="">Seleccione</option>
-                            <?php while ($row = mysqli_fetch_assoc($hornos)) { ?>
+                            <?php foreach ($hornos as $horno) { ?>
                                 <option
-                                    value="<?= (int)$row['hor_id'] ?>"
-                                    data-combustible-id="<?= (int)($row['com_id'] ?? 0) ?>"
-                                    data-combustible="<?= htmlspecialchars($row['com_descripcion'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                                    <?= htmlspecialchars($row['hor_descripcion'], ENT_QUOTES, 'UTF-8') ?>
+                                    value="<?= (int)$horno['value'] ?>"
+                                    data-combustible-id="<?= (int)$horno['combustible_id'] ?>"
+                                    data-combustible="<?= htmlspecialchars($horno['combustible'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <?= htmlspecialchars($horno['label'], ENT_QUOTES, 'UTF-8') ?>
                                 </option>
                             <?php } ?>
                         </select>
@@ -181,6 +184,50 @@ $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
         </form>
     </div>
 </div>
+
+<div class="container mt-4 mb-5">
+    <div class="fundicion-card">
+        <div class="fundicion-header">
+            <h3 class="m-0">Reporte de Fundicion</h3>
+        </div>
+        <div class="fundicion-body">
+            <div class="fundicion-report-actions" id="fundicionReporteActions">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnFundicionCopiar">Copiar</button>
+                <button type="button" class="btn btn-success btn-sm" id="btnFundicionExcel">Excel</button>
+                <button type="button" class="btn btn-danger btn-sm" id="btnFundicionPdf">PDF</button>
+                <button type="button" class="btn btn-info btn-sm" id="btnFundicionImprimir">Imprimir</button>
+            </div>
+            <div class="table-responsive">
+                <table id="tblFundicionReporte" class="table table-striped table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Fecha</th>
+                            <th>Responsable</th>
+                            <th>Materia Prima</th>
+                            <th>Cant. Materia</th>
+                            <th>Cliente</th>
+                            <th>Producto</th>
+                            <th>Cant. Producto</th>
+                            <th>Residuo</th>
+                            <th>Horno</th>
+                            <th>Combustible</th>
+                            <th>Cant. Combustible</th>
+                            <th>Horario</th>
+                            <th>Perdida Metalica</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
+</script>
 
 <style>
 .page-main .container {
@@ -297,6 +344,26 @@ $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
 
 .fundicion-actions .btn {
     min-width: 96px;
+}
+
+.fundicion-report-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.fundicion-report-actions .btn {
+    min-width: 90px;
+}
+
+.dt-buttons {
+    display: none;
+}
+
+#tblFundicionReporte td,
+#tblFundicionReporte th {
+    vertical-align: middle;
 }
 
 @media (max-width: 991px) {

@@ -2,7 +2,13 @@
 include_once '../DAO/Horno/HornoDAO.php';
 include_once '../DAO/Combustible/CombustibleDAO.php';
 
-class CtrlHorno extends HornoDAO {
+class CtrlHorno {
+
+    private $hornoDAO;
+
+    public function __construct() {
+        $this->hornoDAO = HornoDAO::getInstance();
+    }
 
     public function read() {
         $combustibleDAO = CombustibleDAO::getInstance();
@@ -21,7 +27,7 @@ class CtrlHorno extends HornoDAO {
 
     public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $rs = $this->getAll();
+        $rs = $this->hornoDAO->getAll();
         $array = ['data' => []];
 
         while ($row = mysqli_fetch_assoc($rs)) {
@@ -51,7 +57,7 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $rs = $this->getById($hor_id);
+        $rs = $this->hornoDAO->getById($hor_id);
         $row = mysqli_fetch_assoc($rs);
         echo json_encode($row ?: []);
     }
@@ -73,7 +79,7 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $this->insertRecord($hor_descripcion, $com_id, $hor_estado);
+        $this->hornoDAO->insertRecord($hor_descripcion, $com_id, $hor_estado);
         echo json_encode(['ok' => true, 'msg' => 'Horno creado correctamente']);
     }
 
@@ -95,7 +101,7 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $this->updateRecord($hor_id, $hor_descripcion, $com_id, $hor_estado);
+        $this->hornoDAO->updateRecord($hor_id, $hor_descripcion, $com_id, $hor_estado);
         echo json_encode(['ok' => true, 'msg' => 'Horno actualizado correctamente']);
     }
 
@@ -108,7 +114,7 @@ class CtrlHorno extends HornoDAO {
             return;
         }
 
-        $this->deleteRecord($hor_id);
+        $this->hornoDAO->deleteRecord($hor_id);
         echo json_encode(['ok' => true, 'msg' => 'Horno eliminado correctamente']);
     }
 }

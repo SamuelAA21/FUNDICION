@@ -1,7 +1,13 @@
 <?php
 include_once '../DAO/TipoMetal/TipoMetalDAO.php';
 
-class CtrlTipoMetal extends TipoMetalDAO {
+class CtrlTipoMetal {
+
+    private $tipoMetalDAO;
+
+    public function __construct() {
+        $this->tipoMetalDAO = TipoMetalDAO::getInstance();
+    }
 
     public function read() {
         include_once '../View/TipoMetal/viewTipoMetal.php';
@@ -9,7 +15,7 @@ class CtrlTipoMetal extends TipoMetalDAO {
 
     public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $rs = $this->getAll();
+        $rs = $this->tipoMetalDAO->getAll();
         $array = ['data' => []];
 
         while ($row = mysqli_fetch_assoc($rs)) {
@@ -26,7 +32,7 @@ class CtrlTipoMetal extends TipoMetalDAO {
     public function one() {
         header('Content-Type: application/json; charset=utf-8');
         $tmetal_id = isset($_POST['tmetal_id']) ? (int)$_POST['tmetal_id'] : 0;
-        $rs = $this->getById($tmetal_id);
+        $rs = $this->tipoMetalDAO->getById($tmetal_id);
         $row = mysqli_fetch_assoc($rs);
         echo json_encode($row ?: []);
     }
@@ -42,7 +48,7 @@ class CtrlTipoMetal extends TipoMetalDAO {
             return;
         }
 
-        $this->insertRecord($tmetal_descripcion, $tmetal_estado);
+        $this->tipoMetalDAO->insertRecord($tmetal_descripcion, $tmetal_estado);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal creado correctamente']);
     }
 
@@ -58,7 +64,7 @@ class CtrlTipoMetal extends TipoMetalDAO {
             return;
         }
 
-        $this->updateRecord($tmetal_id, $tmetal_descripcion, $tmetal_estado);
+        $this->tipoMetalDAO->updateRecord($tmetal_id, $tmetal_descripcion, $tmetal_estado);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal actualizado correctamente']);
     }
 
@@ -71,7 +77,7 @@ class CtrlTipoMetal extends TipoMetalDAO {
             return;
         }
 
-        $this->deleteRecord($tmetal_id);
+        $this->tipoMetalDAO->deleteRecord($tmetal_id);
         echo json_encode(['ok' => true, 'msg' => 'Tipo de metal eliminado correctamente']);
     }
 }

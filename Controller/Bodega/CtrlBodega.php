@@ -1,7 +1,13 @@
 <?php
 include_once '../DAO/Bodega/BodegaDAO.php';
 
-class CtrlBodega extends BodegaDAO {
+class CtrlBodega {
+
+    private $bodegaDAO;
+
+    public function __construct() {
+        $this->bodegaDAO = BodegaDAO::getInstance();
+    }
 
     public function read() {
         include_once '../View/Bodega/viewBodega.php';
@@ -9,7 +15,7 @@ class CtrlBodega extends BodegaDAO {
 
     public function data() {
         header('Content-Type: application/json; charset=utf-8');
-        $rs = $this->getAll();
+        $rs = $this->bodegaDAO->getAll();
         $array = ['data' => []];
 
         while ($row = mysqli_fetch_assoc($rs)) {
@@ -38,7 +44,7 @@ class CtrlBodega extends BodegaDAO {
             return;
         }
 
-        $rs = $this->getById($bod_id);
+        $rs = $this->bodegaDAO->getById($bod_id);
         $row = mysqli_fetch_assoc($rs);
         echo json_encode($row ?: []);
     }
@@ -52,7 +58,7 @@ class CtrlBodega extends BodegaDAO {
             return;
         }
 
-        $this->insertRecord($data['payload']);
+        $this->bodegaDAO->insertRecord($data['payload']);
         echo json_encode(['ok' => true, 'msg' => 'Bodega creada correctamente']);
     }
 
@@ -71,7 +77,7 @@ class CtrlBodega extends BodegaDAO {
             return;
         }
 
-        $this->updateRecord($bod_id, $data['payload']);
+        $this->bodegaDAO->updateRecord($bod_id, $data['payload']);
         echo json_encode(['ok' => true, 'msg' => 'Bodega actualizada correctamente']);
     }
 
@@ -84,7 +90,7 @@ class CtrlBodega extends BodegaDAO {
             return;
         }
 
-        $this->deleteRecord($bod_id);
+        $this->bodegaDAO->deleteRecord($bod_id);
         echo json_encode(['ok' => true, 'msg' => 'Bodega eliminada correctamente']);
     }
 

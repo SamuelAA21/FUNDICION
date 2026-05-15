@@ -65,6 +65,38 @@ class FundicionDAO extends Connection {
         ");
     }
 
+    public function getReportList() {
+        return $this->execute("
+            SELECT
+                rf.rfun_id,
+                rf.rfun_fecha,
+                rf.usu_responsable,
+                rf.rfun_observacion,
+                CONCAT(COALESCE(u.usu_nombres, ''), ' ', COALESCE(u.usu_apellidos, '')) AS responsable_nombre,
+                mp.mat_descripcion,
+                df.dfun_cantidad,
+                c.cli_razon_social,
+                pt.pro_nombre,
+                df.dfun_cantprot,
+                df.dfun_cantesc,
+                h.hor_descripcion,
+                co.com_descripcion,
+                df.dfun_cantidad_com,
+                df.dfun_hinicio,
+                df.dfun_hfin,
+                df.dfun_per_metal
+            FROM registro_fundicion rf
+            INNER JOIN detalle_fundicion df ON df.rfun_id = rf.rfun_id
+            LEFT JOIN usuario u ON u.usu_login = rf.usu_responsable
+            LEFT JOIN materia_prima mp ON mp.mat_codigo = df.mat_codigo
+            LEFT JOIN cliente c ON c.cli_nit = df.Cli_mat
+            LEFT JOIN producto_terminado pt ON pt.pro_id = df.pro_id
+            LEFT JOIN horno h ON h.hor_id = df.hor_id
+            LEFT JOIN combustible co ON co.com_id = df.com_id
+            ORDER BY rf.rfun_fecha DESC, rf.rfun_id DESC, df.dfun_id DESC
+        ");
+    }
+
     public function getCombustibleIdByHorno($hor_id) {
         $hor_id = (int)$hor_id;
         $rs = $this->execute("SELECT com_id FROM horno WHERE hor_id = $hor_id LIMIT 1");
