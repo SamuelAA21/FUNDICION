@@ -175,7 +175,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                     </div>
                 </div>
 
-                <div class="fundicion-actions">
+                <div class="d-flex flex-wrap gap-2 mt-3">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <a href="index.php" class="btn btn-success">Salir</a>
                     <button type="button" id="btnLimpiarFundicion" class="btn btn-light">Limpiar</button>
@@ -191,7 +191,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
             <h3 class="m-0">Reporte de Fundicion</h3>
         </div>
         <div class="fundicion-body">
-            <div class="fundicion-report-actions" id="fundicionReporteActions">
+            <div class="d-flex flex-wrap gap-2 mb-3" id="fundicionReporteActions">
                 <button type="button" class="btn btn-outline-secondary btn-sm" id="btnFundicionCopiar">Copiar</button>
                 <button type="button" class="btn btn-success btn-sm" id="btnFundicionExcel">Excel</button>
                 <button type="button" class="btn btn-danger btn-sm" id="btnFundicionPdf">PDF</button>
@@ -237,6 +237,11 @@ const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
 <style>
 .page-main .container {
     max-width: 1160px;
+}
+
+.form-control:focus {
+    border-color: #b6b6b6 !important;
+    box-shadow: 0 0 0 .2rem rgba(255, 255, 255, .25);
 }
 
 .fundicion-card {
@@ -313,20 +318,6 @@ const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
     margin-top: 20px;
 }
 
-.fundicion-field label {
-    display: block;
-    margin-bottom: 10px;
-    color: #5d544c;
-    font-weight: 600;
-}
-
-.fundicion-field .form-control {
-    min-height: 44px;
-    border: 1px solid #b7b7b7;
-    border-radius: 2px;
-    box-shadow: none;
-}
-
 .fundicion-observaciones {
     margin-top: 28px;
 }
@@ -335,40 +326,8 @@ const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
     width: min(540px, 100%);
 }
 
-.fundicion-observaciones textarea.form-control {
-    min-height: 110px;
-    resize: vertical;
-}
-
-.fundicion-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
-.fundicion-actions .btn {
-    min-width: 96px;
-}
-
-.fundicion-report-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-}
-
-.fundicion-report-actions .btn {
-    min-width: 90px;
-}
-
 .dt-buttons {
     display: none;
-}
-
-#tblFundicionReporte td,
-#tblFundicionReporte th {
-    vertical-align: middle;
 }
 
 @media (max-width: 991px) {

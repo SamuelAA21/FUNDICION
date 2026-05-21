@@ -7,8 +7,6 @@ $(document).ready(function () {
     var inputCombustibleTipo = document.getElementById('fun_combustible_tipo');
     var tablaFundicionReporte = null;
 
-
-
     function crearGraficaColumnas(data) {
         Highcharts.chart(data.container, {
             chart: {
@@ -52,39 +50,65 @@ $(document).ready(function () {
 
     function renderizarGraficaFundicion(registros) {
         var acumulado = {};
+        var categorias;
+        var serieMateriaPrima = [];
+        var serieProducto = [];
+        var serieResiduo = [];
+
+        if (!Array.isArray(registros) || !registros.length) {
+            return;
+        }
 
         registros.forEach(function (item) {
             var producto = item.pro_nombre || 'Sin producto';
-            var cantidad = parseFloat(item.dfun_cantprot || 0);
 
             if (!acumulado[producto]) {
-                acumulado[producto] = 0;
+                acumulado[producto] = {
+                    materiaPrima: 0,
+                    productoTerminado: 0,
+                    residuo: 0,
+
+                };
             }
 
-            acumulado[producto] += cantidad;
+            acumulado[producto].materiaPrima += parseFloat(item.dfun_cantidad || 0);
+            acumulado[producto].productoTerminado += parseFloat(item.dfun_cantprot || 0);
+            acumulado[producto].residuo += parseFloat(item.dfun_cantesc || 0);
+
         });
 
-        var categorias = Object.keys(acumulado);
+        categorias = Object.keys(acumulado);
 
-        var valores = categorias.map(function (producto) {
-            return acumulado[producto];
+        categorias.forEach(function (producto) {
+            serieMateriaPrima.push(Number(acumulado[producto].materiaPrima.toFixed(2)));
+            serieProducto.push(Number(acumulado[producto].productoTerminado.toFixed(2)));
+            serieResiduo.push(Number(acumulado[producto].residuo.toFixed(2)));
         });
 
         crearGraficaColumnas({
             container: 'graficaFundicionProducto',
-            titulo: 'Producción por producto',
-            subtitulo: 'Datos tomados del reporte de fundición',
+            titulo: 'Produccion por producto',
+            subtitulo: 'Comparativo de materia prima, producto terminado, y residuo',
             categorias: categorias,
-            tituloY: 'Cantidad producida',
+            tituloY: 'Cantidad total',
             sufijoTooltip: ' und',
             series: [
                 {
-                    name: 'Cantidad',
-                    data: valores
-                }
+                    name: 'Materia prima',
+                    data: serieMateriaPrima
+                },
+                {
+                    name: 'Producto terminado',
+                    data: serieProducto
+                },
+                {
+                    name: 'Residuo',
+                    data: serieResiduo
+                },
             ]
         });
     }
+
     function inicializarReporte() {
         if (typeof $ === 'undefined' || !$.fn.DataTable || !$('#tblFundicionReporte').length || typeof URL_FUNDICION_DATA === 'undefined') {
             return;
