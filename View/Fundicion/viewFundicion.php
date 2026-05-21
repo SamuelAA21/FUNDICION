@@ -57,7 +57,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                     </div>
 
                     <div class="fundicion-field">
-                        <label for="fun_materia_cantidad">Cantidad</label>
+                        <label for="fun_materia_cantidad">Cantidad de materia prima</label>
                         <input type="number" step="0.01" id="fun_materia_cantidad" name="fun_materia_cantidad" class="form-control" min="0" required>
                     </div>
 
@@ -90,7 +90,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                     </div>
 
                     <div class="fundicion-field">
-                        <label for="fun_producto_cantidad">Cantidad</label>
+                        <label for="fun_producto_cantidad">Cantidad de producto</label>
                         <input type="number" step="0.01" id="fun_producto_cantidad" name="fun_producto_cantidad" class="form-control" min="0" required>
                     </div>
 
@@ -100,7 +100,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                     </div>
 
                     <div class="fundicion-field">
-                        <label for="fun_residuo_cantidad">Cantidad</label>
+                        <label for="fun_residuo_cantidad">Cantidad de residuo</label>
                         <input type="number" step="0.01" id="fun_residuo_cantidad" name="fun_residuo_cantidad" class="form-control" min="0" value="0">
                     </div>
                 </div>
@@ -137,7 +137,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                     </div>
 
                     <div class="fundicion-field">
-                        <label for="fun_combustible_cantidad">Cantidad</label>
+                        <label for="fun_combustible_cantidad">Cantidad de combustible</label>
                         <input type="number" step="0.01" id="fun_combustible_cantidad" name="fun_combustible_cantidad" class="form-control" min="0" required>
                     </div>
 
@@ -197,6 +197,9 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                 <button type="button" class="btn btn-danger btn-sm" id="btnFundicionPdf">PDF</button>
                 <button type="button" class="btn btn-info btn-sm" id="btnFundicionImprimir">Imprimir</button>
             </div>
+
+            <div id="graficaFundicionProducto" style="width:100%; height:400px; margin-bottom:20px;"></div>
+
             <div class="table-responsive">
                 <table id="tblFundicionReporte" class="table table-striped table-bordered w-100">
                     <thead>
@@ -228,6 +231,8 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
 <script>
 const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
 </script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
 
 <style>
 .page-main .container {

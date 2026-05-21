@@ -7,6 +7,84 @@ $(document).ready(function () {
     var inputCombustibleTipo = document.getElementById('fun_combustible_tipo');
     var tablaFundicionReporte = null;
 
+
+
+    function crearGraficaColumnas(data) {
+        Highcharts.chart(data.container, {
+            chart: {
+                type: 'column'
+            },
+
+            title: {
+                text: data.titulo
+            },
+
+            subtitle: {
+                text: data.subtitulo || ''
+            },
+
+            xAxis: {
+                categories: data.categorias,
+                crosshair: true
+            },
+
+            yAxis: {
+                min: 0,
+                title: {
+                    text: data.tituloY
+                }
+            },
+
+            tooltip: {
+                valueSuffix: data.sufijoTooltip || ''
+            },
+
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+
+            series: data.series
+        });
+    }
+
+    function renderizarGraficaFundicion(registros) {
+        var acumulado = {};
+
+        registros.forEach(function (item) {
+            var producto = item.pro_nombre || 'Sin producto';
+            var cantidad = parseFloat(item.dfun_cantprot || 0);
+
+            if (!acumulado[producto]) {
+                acumulado[producto] = 0;
+            }
+
+            acumulado[producto] += cantidad;
+        });
+
+        var categorias = Object.keys(acumulado);
+
+        var valores = categorias.map(function (producto) {
+            return acumulado[producto];
+        });
+
+        crearGraficaColumnas({
+            container: 'graficaFundicionProducto',
+            titulo: 'Producción por producto',
+            subtitulo: 'Datos tomados del reporte de fundición',
+            categorias: categorias,
+            tituloY: 'Cantidad producida',
+            sufijoTooltip: ' und',
+            series: [
+                {
+                    name: 'Cantidad',
+                    data: valores
+                }
+            ]
+        });
+    }
     function inicializarReporte() {
         if (typeof $ === 'undefined' || !$.fn.DataTable || !$('#tblFundicionReporte').length || typeof URL_FUNDICION_DATA === 'undefined') {
             return;
@@ -47,7 +125,11 @@ $(document).ready(function () {
                 { data: 'horario', defaultContent: '' },
                 { data: 'dfun_per_metal', defaultContent: '' },
                 { data: 'rfun_observacion', defaultContent: '' }
-            ]
+            ],
+
+            initComplete: function (settings, json) {
+                renderizarGraficaFundicion(json.data);
+            }
         });
 
         $('#btnFundicionCopiar').off('click').on('click', function () {
