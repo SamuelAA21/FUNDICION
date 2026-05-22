@@ -20,6 +20,14 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                     <label for="txtBuscarFundicion">Buscar en reportes</label>
                     <input type="text" id="txtBuscarFundicion" class="form-control" placeholder="Ej: 2, chatarra, cliente...">
                 </div>
+                <div class="fundicion-search-field">
+                    <label for="txtFechaDesdeFundicion">Fecha desde</label>
+                    <input type="date" id="txtFechaDesdeFundicion" class="form-control">
+                </div>
+                <div class="fundicion-search-field">
+                    <label for="txtFechaHastaFundicion">Fecha hasta</label>
+                    <input type="date" id="txtFechaHastaFundicion" class="form-control">
+                </div>
                 <div class="fundicion-search-actions">
                     <button type="button" class="btn btn-primary" id="btnBuscarFundicion">Buscar</button>
                     <button type="button" class="btn btn-light" id="btnLimpiarBusquedaFundicion">Limpiar</button>
@@ -79,6 +87,12 @@ const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
     text-align: center;
 }
 
+.form-control:focus {
+    border-color: #b6b6b6 !important;
+    box-shadow: 0 0 0 .2rem rgba(255, 255, 255, .25);
+}
+
+
 .fundicion-header h3 {
     color: #5d544c;
     font-weight: 700;
@@ -98,7 +112,7 @@ const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
 
 .fundicion-search-bar {
     display: grid;
-    grid-template-columns: minmax(280px, 420px) auto;
+    grid-template-columns: minmax(220px, 1.4fr) minmax(170px, .8fr) minmax(170px, .8fr) auto;
     gap: 14px;
     align-items: end;
     margin-bottom: 18px;

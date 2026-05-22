@@ -6,6 +6,8 @@ $(document).ready(function () {
     var selectHorno = document.getElementById('fun_horno');
     var inputCombustibleTipo = document.getElementById('fun_combustible_tipo');
     var inputBuscarFundicion = document.getElementById('txtBuscarFundicion');
+    var inputFechaDesdeFundicion = document.getElementById('txtFechaDesdeFundicion');
+    var inputFechaHastaFundicion = document.getElementById('txtFechaHastaFundicion');
     var btnBuscarFundicion = document.getElementById('btnBuscarFundicion');
     var btnLimpiarBusquedaFundicion = document.getElementById('btnLimpiarBusquedaFundicion');
     var tablaFundicionReporte = null;
@@ -170,6 +172,24 @@ $(document).ready(function () {
         ].join(' '));
     }
 
+    function registroCumpleFiltroFecha(registro, fechaDesde, fechaHasta) {
+        var fechaRegistro = registro && registro.rfun_fecha ? String(registro.rfun_fecha) : '';
+
+        if (fechaRegistro === '') {
+            return !fechaDesde && !fechaHasta;
+        }
+
+        if (fechaDesde && fechaRegistro < fechaDesde) {
+            return false;
+        }
+
+        if (fechaHasta && fechaRegistro > fechaHasta) {
+            return false;
+        }
+
+        return true;
+    }
+
     function aplicarRegistrosATabla(registros) {
         if (!tablaFundicionReporte) {
             return;
@@ -184,6 +204,8 @@ $(document).ready(function () {
     function ejecutarBusquedaReporte() {
         var terminoBusqueda = '';
         var terminoNormalizado = '';
+        var fechaDesde = '';
+        var fechaHasta = '';
         var registrosFiltrados;
 
         if (!tablaFundicionReporte) {
@@ -194,15 +216,27 @@ $(document).ready(function () {
             terminoBusqueda = inputBuscarFundicion.value || '';
         }
 
+        if (inputFechaDesdeFundicion) {
+            fechaDesde = inputFechaDesdeFundicion.value || '';
+        }
+
+        if (inputFechaHastaFundicion) {
+            fechaHasta = inputFechaHastaFundicion.value || '';
+        }
+
         terminoNormalizado = normalizarTexto(terminoBusqueda);
 
-        if (terminoNormalizado === '') {
+        if (terminoNormalizado === '' && fechaDesde === '' && fechaHasta === '') {
             aplicarRegistrosATabla(todosLosRegistrosFundicion);
             return;
         }
 
         registrosFiltrados = todosLosRegistrosFundicion.filter(function (registro) {
-            return obtenerTextoBusquedaRegistro(registro).indexOf(terminoNormalizado) !== -1;
+            var coincideTexto = terminoNormalizado === ''
+                || obtenerTextoBusquedaRegistro(registro).indexOf(terminoNormalizado) !== -1;
+            var coincideFecha = registroCumpleFiltroFecha(registro, fechaDesde, fechaHasta);
+
+            return coincideTexto && coincideFecha;
         });
 
         aplicarRegistrosATabla(registrosFiltrados);
@@ -211,6 +245,14 @@ $(document).ready(function () {
     function limpiarBusquedaReporte() {
         if (inputBuscarFundicion) {
             inputBuscarFundicion.value = '';
+        }
+
+        if (inputFechaDesdeFundicion) {
+            inputFechaDesdeFundicion.value = '';
+        }
+
+        if (inputFechaHastaFundicion) {
+            inputFechaHastaFundicion.value = '';
         }
 
         aplicarRegistrosATabla(todosLosRegistrosFundicion);
