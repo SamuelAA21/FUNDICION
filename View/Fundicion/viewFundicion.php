@@ -1,6 +1,5 @@
 <?php
 $URL_FUNDICION_POSTNEW = getUrl("Fundicion", "Fundicion", "postNew");
-$URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
 ?>
 
 <div class="container mt-4 mb-5">
@@ -152,55 +151,6 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
     </div>
 </div>
 
-<div class="container mt-4 mb-5">
-    <div class="fundicion-card">
-        <div class="fundicion-header">
-            <h3 class="m-0">Reporte de Fundicion</h3>
-        </div>
-        <div class="fundicion-body">
-            <div class="d-flex flex-wrap gap-2 mb-3" id="fundicionReporteActions">
-                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnFundicionCopiar">Copiar</button>
-                <button type="button" class="btn btn-success btn-sm" id="btnFundicionExcel">Excel</button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnFundicionPdf">PDF</button>
-                <button type="button" class="btn btn-info btn-sm" id="btnFundicionImprimir">Imprimir</button>
-            </div>
-
-            <div id="graficaFundicionProducto" style="width:100%; height:400px; margin-bottom:20px;"></div>
-
-            <div class="table-responsive">
-                <table id="tblFundicionReporte" class="table table-striped table-bordered w-100">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Fecha</th>
-                            <th>Responsable</th>
-                            <th>Materia Prima</th>
-                            <th>Cant. Materia</th>
-                            <th>Cliente</th>
-                            <th>Producto</th>
-                            <th>Cant. Producto</th>
-                            <th>Residuo</th>
-                            <th>Horno</th>
-                            <th>Combustible</th>
-                            <th>Cant. Combustible</th>
-                            <th>Horario</th>
-                            <th>Perdida Metalica</th>
-                            <th>Observaciones</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
-</script>
-
-<script src="https://code.highcharts.com/highcharts.js"></script>
-
 <style>
 .page-main .container {
     max-width: 1160px;
@@ -291,10 +241,6 @@ const URL_FUNDICION_DATA = "<?= $URL_FUNDICION_DATA ?>";
 
 .fundicion-observaciones-box {
     width: min(540px, 100%);
-}
-
-.dt-buttons {
-    display: none;
 }
 
 @media (max-width: 991px) {

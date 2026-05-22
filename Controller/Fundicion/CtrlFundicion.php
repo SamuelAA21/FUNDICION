@@ -27,6 +27,11 @@ class CtrlFundicion {
         include_once '../View/Fundicion/viewFundicion.php';
     }
 
+    public function reportes() {
+        $mensaje = $_GET['msg'] ?? '';
+        include_once '../View/Fundicion/viewFundicionReportes.php';
+    }
+
     public function data() {
         header('Content-Type: application/json; charset=utf-8');
         $rs = $this->fundicionDAO->getReportList();

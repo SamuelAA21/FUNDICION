@@ -20,6 +20,7 @@
             <li><a href="<?php echo getUrl('Horno','Horno','read'); ?>">Horno</a></li>
             <li><a href="<?php echo getUrl('TipoMetal','TipoMetal','read'); ?>">Tipo Metal</a></li>
             <li><a href="<?php echo getUrl('Fundicion','Fundicion','read'); ?>">Fundicion</a></li>
+            <li><a href="<?php echo getUrl('Fundicion','Fundicion','reportes'); ?>">Reportes</a></li>
             <li>
               <button class="openbtn" onclick="openNav()"><img src="images/menu_icon.png" alt=""></button>
             </li>

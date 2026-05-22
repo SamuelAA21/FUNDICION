@@ -11,4 +11,6 @@
   <a href="<?php echo getUrl('Combustible','Combustible','read'); ?>">Combustible</a>
   <a href="<?php echo getUrl('Horno','Horno','read'); ?>">Horno</a>
   <a href="<?php echo getUrl('TipoMetal','TipoMetal','read'); ?>">Tipo Metal</a>
+  <a href="<?php echo getUrl('Fundicion','Fundicion','read'); ?>">Fundicion</a>
+  <a href="<?php echo getUrl('Fundicion','Fundicion','reportes'); ?>">Reportes</a>
 </div>
