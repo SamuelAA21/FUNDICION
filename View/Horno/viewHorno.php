@@ -51,11 +51,7 @@ $URL_HORNO_DELETE  = getUrl("Horno","Horno","delete",false,true);
                 <label class="form-label">Combustible</label>
                 <select class="form-select" name="com_id" id="com_id" required>
                     <option value="">-- Seleccione --</option>
-                    <?php foreach ($combustibles as $combustible) { ?>
-                        <option value="<?= htmlspecialchars((string)$combustible['id'], ENT_QUOTES, 'UTF-8') ?>">
-                            <?= htmlspecialchars($combustible['descripcion'], ENT_QUOTES, 'UTF-8') ?>
-                        </option>
-                    <?php } ?>
+                    <?= $combustiblesOptions ?>
                 </select>
             </div>
 

@@ -15,6 +15,12 @@ class CtrlFundicion {
         $clientes = $this->mapClientes($this->fetchAll($this->fundicionDAO->getClientesList()));
         $productos = $this->mapProductos($this->fetchAll($this->fundicionDAO->getProductosTerminadosList()));
         $hornos = $this->mapHornos($this->fetchAll($this->fundicionDAO->getHornosList()));
+        $responsablesOptions = $this->buildSimpleOptionsHtml($responsables);
+        $materiasPrimasOptions = $this->buildSimpleOptionsHtml($materiasPrimas);
+        $clientesOptions = $this->buildSimpleOptionsHtml($clientes);
+        $productosOptions = $this->buildSimpleOptionsHtml($productos);
+        $hornosOptions = $this->buildHornosOptionsHtml($hornos);
+        $horasOptions = $this->buildHorasOptionsHtml();
         $nextNumero = $this->fundicionDAO->getNextRegistroId();
         $mensaje = $_GET['msg'] ?? '';
 
@@ -226,5 +232,48 @@ class CtrlFundicion {
         }
 
         return $items;
+    }
+
+    private function buildSimpleOptionsHtml($items) {
+        $html = '';
+
+        foreach ($items as $item) {
+            $value = htmlspecialchars((string)($item['value'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $label = htmlspecialchars((string)($item['label'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $html .= '<option value="' . $value . '">' . $label . '</option>';
+        }
+
+        return $html;
+    }
+
+    private function buildHornosOptionsHtml($items) {
+        $html = '';
+
+        foreach ($items as $item) {
+            $value = htmlspecialchars((string)($item['value'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $label = htmlspecialchars((string)($item['label'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $combustibleId = htmlspecialchars((string)($item['combustible_id'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $combustible = htmlspecialchars((string)($item['combustible'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+            $html .= '<option value="' . $value . '" data-combustible-id="' . $combustibleId . '" data-combustible="' . $combustible . '">'
+                . $label
+                . '</option>';
+        }
+
+        return $html;
+    }
+
+    private function buildHorasOptionsHtml() {
+        $html = '';
+
+        for ($hora = 0; $hora < 24; $hora++) {
+            for ($min = 0; $min < 60; $min += 30) {
+                $time = str_pad((string)$hora, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string)$min, 2, '0', STR_PAD_LEFT);
+                $timeEscaped = htmlspecialchars($time, ENT_QUOTES, 'UTF-8');
+                $html .= '<option value="' . $timeEscaped . '">' . $timeEscaped . '</option>';
+            }
+        }
+
+        return $html;
     }
 }

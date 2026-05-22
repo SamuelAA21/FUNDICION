@@ -32,11 +32,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                         <label for="fun_responsable">Responsable Fundicion:</label>
                         <select id="fun_responsable" name="fun_responsable" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <?php foreach ($responsables as $responsable) { ?>
-                                <option value="<?= htmlspecialchars($responsable['value'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <?= htmlspecialchars($responsable['label'], ENT_QUOTES, 'UTF-8') ?>
-                                </option>
-                            <?php } ?>
+                            <?= $responsablesOptions ?>
                         </select>
                     </div>
                 </div>
@@ -48,11 +44,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                         <label for="fun_materia_prima">Materia Prima</label>
                         <select id="fun_mat_codigo" name="fun_mat_codigo" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <?php foreach ($materiasPrimas as $materiaPrima) { ?>
-                                <option value="<?= (int)$materiaPrima['value'] ?>">
-                                    <?= htmlspecialchars($materiaPrima['label'], ENT_QUOTES, 'UTF-8') ?>
-                                </option>
-                            <?php } ?>
+                            <?= $materiasPrimasOptions ?>
                         </select>
                     </div>
 
@@ -65,11 +57,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                         <label for="fun_cliente">Cliente</label>
                         <select id="fun_cliente_id" name="fun_cliente_id" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <?php foreach ($clientes as $cliente) { ?>
-                                <option value="<?= htmlspecialchars($cliente['value'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <?= htmlspecialchars($cliente['label'], ENT_QUOTES, 'UTF-8') ?>
-                                </option>
-                            <?php } ?>
+                            <?= $clientesOptions ?>
                         </select>
                     </div>
                 </div>
@@ -81,11 +69,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                         <label for="fun_producto_terminado">Producto Terminado</label>
                         <select id="fun_producto_id" name="fun_producto_id" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <?php foreach ($productos as $producto) { ?>
-                                <option value="<?= (int)$producto['value'] ?>">
-                                    <?= htmlspecialchars($producto['label'], ENT_QUOTES, 'UTF-8') ?>
-                                </option>
-                            <?php } ?>
+                            <?= $productosOptions ?>
                         </select>
                     </div>
 
@@ -120,14 +104,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                         <label for="fun_horno">Horno</label>
                         <select id="fun_horno" name="fun_horno" class="form-control" required>
                             <option value="">Seleccione</option>
-                            <?php foreach ($hornos as $horno) { ?>
-                                <option
-                                    value="<?= (int)$horno['value'] ?>"
-                                    data-combustible-id="<?= (int)$horno['combustible_id'] ?>"
-                                    data-combustible="<?= htmlspecialchars($horno['combustible'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <?= htmlspecialchars($horno['label'], ENT_QUOTES, 'UTF-8') ?>
-                                </option>
-                            <?php } ?>
+                            <?= $hornosOptions ?>
                         </select>
                     </div>
 
@@ -145,12 +122,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                         <label for="fun_hora_inicio">Hora Inicio</label>
                         <select id="fun_hora_inicio" name="fun_hora_inicio" class="form-control">
                             <option value="">Hora Inicio</option>
-                            <?php for ($hora = 0; $hora < 24; $hora++) {
-                                for ($min = 0; $min < 60; $min += 30) {
-                                    $time = str_pad((string)$hora, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string)$min, 2, '0', STR_PAD_LEFT); ?>
-                                    <option value="<?= $time ?>"><?= $time ?></option>
-                            <?php }
-                            } ?>
+                            <?= $horasOptions ?>
                         </select>
                     </div>
 
@@ -158,12 +130,7 @@ $URL_FUNDICION_DATA = getUrl("Fundicion", "Fundicion", "data", false, true);
                         <label for="fun_hora_fin">Hora Fin</label>
                         <select id="fun_hora_fin" name="fun_hora_fin" class="form-control">
                             <option value="">Hora Fin</option>
-                            <?php for ($hora = 0; $hora < 24; $hora++) {
-                                for ($min = 0; $min < 60; $min += 30) {
-                                    $time = str_pad((string)$hora, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string)$min, 2, '0', STR_PAD_LEFT); ?>
-                                    <option value="<?= $time ?>"><?= $time ?></option>
-                            <?php }
-                            } ?>
+                            <?= $horasOptions ?>
                         </select>
                     </div>
                 </div>

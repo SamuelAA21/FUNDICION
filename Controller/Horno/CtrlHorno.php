@@ -22,6 +22,8 @@ class CtrlHorno {
             ];
         }
 
+        $combustiblesOptions = $this->buildCombustiblesOptionsHtml($combustibles);
+
         include_once '../View/Horno/viewHorno.php';
     }
 
@@ -116,5 +118,17 @@ class CtrlHorno {
 
         $this->hornoDAO->deleteRecord($hor_id);
         echo json_encode(['ok' => true, 'msg' => 'Horno eliminado correctamente']);
+    }
+
+    private function buildCombustiblesOptionsHtml($combustibles) {
+        $html = '';
+
+        foreach ($combustibles as $combustible) {
+            $id = htmlspecialchars((string)($combustible['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $descripcion = htmlspecialchars((string)($combustible['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $html .= '<option value="' . $id . '">' . $descripcion . '</option>';
+        }
+
+        return $html;
     }
 }
